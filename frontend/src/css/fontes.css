@@ -1,0 +1,13 @@
+/* Roboto */
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./../fonts/Roboto/Roboto-Regular.ttf');
+}
+
+/* Open Sans */
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('./../fonts/OpenSans/OpenSans-Regular.ttf');
+}

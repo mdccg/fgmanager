@@ -1,0 +1,61 @@
+header {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+
+  background-color: #e74c3c;
+
+  padding: 0.25em 1.5em 0.25em;
+  min-height: 4em;
+}
+
+header > div.logo {
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+
+  text-transform: uppercase;
+  font-family: "Open Sans";
+  font-weight: bolder;
+  line-height: 1.5;
+  font-size: large;
+  color: white;
+}
+
+header > div.usuario {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+}
+
+/* icones */
+
+.fa-bars {
+  font-size: x-large;
+}
+
+header img.fg {
+  height: 2.25em;
+  width: 2.25em;
+}
+
+header img.perfil {
+  border-radius: 1e9em; /* não é exagerado ÙwÚ */
+  object-fit: contain;
+  height: 2.75em;
+  width: 2.75em;
+
+  background-color: white;
+  border: 4px solid white;
+  margin-right: 0.25em;
+}
+
+.fa-caret-down {
+  font-size: x-large;
+}
+
+.fa-bars,
+.fa-caret-down {
+  cursor: pointer;
+  color: white;
+}

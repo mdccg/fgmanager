@@ -1,0 +1,23 @@
+@import "./css/reset.css";
+@import "./css/fontes.css";
+
+.App {
+  font-family: "Roboto";
+  min-height: 100vh;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.smooth-shadow {
+  -webkit-box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
+     -moz-box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
+          box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
+}
