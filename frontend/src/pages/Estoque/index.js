@@ -1,14 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './styles.css';
 
-class Estoque extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Estoque</h1>
-      </div>
-    );
-  }
+import Header from './../../components/Header';
+
+function Estoque() {
+  const Estoque = () => (
+    <div className="estoque">
+      <h1 className="foo">Estoque</h1>
+    </div>
+  );
+
+  return (
+    <div className="App">
+      <Header />
+      <Estoque />
+    </div>
+  );
 }
 
 export default Estoque;
