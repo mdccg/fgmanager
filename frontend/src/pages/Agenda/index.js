@@ -5,7 +5,30 @@ class Agenda extends Component {
   render() {
     return (
       <div>
-        <h1>Agenda</h1>
+        <div>
+          <div>
+            <div >
+              <h2 >Clientes</h2>
+            </div>
+          </div>
+          <input />
+
+          <div >
+            <div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
