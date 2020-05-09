@@ -37,7 +37,7 @@ function Menu(props) {
   const IconeFuncionarios = () => <FontAwesomeIcon icon={faUsersCog} />;
 
   return (
-    <aside className="no-select">
+    <aside>
       <div className="menu">
         <IconeMenu />
       </div>

@@ -4,10 +4,7 @@ import './styles.css';
 import Menu from './../Menu';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBars,
-  faCaretDown
-} from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 import perfil from './../../tmp/foto-de-perfil.png';
 
@@ -20,10 +17,10 @@ function Header() {
 
     const aside = $('aside'),
           width = aberto ? '0' : '16em',
+     //  header = $('header'),
             App = $('.App');
     
     aside.style.width = width;
-    
     App.style.marginLeft = width;
 
     setAberto(!aberto);
@@ -34,7 +31,8 @@ function Header() {
   // componentes
   const Logo = () => {
     const visibility = aberto ? 'hidden' : 'visible';
-
+    // const display = aberto ? 'none' : 'block';
+    
     const IconeMenu = () => (
       <div className="icone-menu" style={{ visibility: visibility }}>
         <FontAwesomeIcon
@@ -72,7 +70,7 @@ function Header() {
         exibirMenu={exibirMenu}
         rota={window.location.pathname} />
     </header>
-  );;
+  );
 }
 
 export default Header;

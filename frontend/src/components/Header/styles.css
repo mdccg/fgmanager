@@ -1,6 +1,7 @@
 header {
+  /* todo position fixed */
+  
   overflow-x: hidden;
-
   align-items: center;
   justify-content: space-between;
 
@@ -36,13 +37,16 @@ header div.usuario {
   padding-right: 1.5em;
 }
 
+header div.logo span {
+  padding-left: 1em;
+}
+
 /* icones */
 
 header .fa-bars {
   font-size: x-large;
 
   padding-left: 1em;
-  padding-right: 1em;
 }
 
 header img.perfil {

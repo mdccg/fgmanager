@@ -4,10 +4,10 @@ div.estoque {
   background-color: white;
   border-radius: 4px;
   min-height: 80vh;
+  padding: 2em;
   margin: 2em;
 
   justify-content: center;
-  align-items: center;
   display: flex;
 }
 

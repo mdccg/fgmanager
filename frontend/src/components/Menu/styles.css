@@ -5,6 +5,8 @@ aside div.menu {
   
   background-color: hsl(6, 78%, 57%);
   
+  margin-bottom: 2em;
+  
   height: 4.5em;
 }
 
@@ -19,12 +21,13 @@ aside div.menu .fa-bars {
 }
 
 aside {
+  width: 16em;
+  
   background-color: white;
   overflow-x: hidden;
   transition: .5s;
   position: fixed;
   height: 100%;
-  width: 16em;
   left: 0;
   top: 0;
 }
@@ -47,7 +50,6 @@ aside li {
   
   height: 4em;
   
-  margin-bottom: .125em;
   padding-right: 8em;
   padding-left: 1em;
   
