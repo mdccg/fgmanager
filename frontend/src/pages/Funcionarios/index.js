@@ -1,14 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './styles.css';
 
-class Funcionarios extends Component {
-  render() {
-    return (
-      <div>
-        <h1>Funcionarios</h1>
-      </div>
-    );
-  }
+import Header from './../../components/Header';
+
+function Funcionarios() {
+  const Funcionarios = () => (
+    <div className="funcionarios">
+      <h1 className="foo">Funcionários</h1>
+    </div>
+  );
+
+  return (
+    <div className="App">
+      <Header />
+      <Funcionarios />
+    </div>
+  );
 }
 
 export default Funcionarios;

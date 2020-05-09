@@ -1,0 +1,66 @@
+aside div.menu {
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  
+  background-color: hsl(6, 78%, 57%);
+  
+  margin-bottom: 2em;
+  
+  height: 4.5em;
+}
+
+aside div.menu .fa-bars {
+  font-size: x-large;
+  
+  cursor: pointer;
+  color: white;
+  
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+aside {
+  width: 16em;
+  
+  background-color: white;
+  overflow-x: hidden;
+  transition: .5s;
+  position: fixed;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+
+aside a {
+  text-decoration: none;
+  font-weight: bold;
+  font-size: large;
+}
+
+aside a.rota-atual li {
+  border-left: .25em solid hsl(6, 78%, 57%);
+}
+
+aside li {
+  border-left: .25em solid white;
+
+  align-items: center;
+  display: flex;
+  
+  height: 4em;
+  
+  padding-right: 8em;
+  padding-left: 1em;
+  
+  transition: all .5s;
+}
+
+aside svg {
+  padding-right: 1em;
+}
+
+aside a,
+aside svg {
+  color: hsl(0, 0%, 30%);
+}

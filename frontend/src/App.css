@@ -1,9 +1,21 @@
 @import "./css/reset.css";
 @import "./css/fontes.css";
 
+html {
+  background-color: hsl(192, 15%, 94%);
+  
+  min-height: 100vh;
+  
+  -webkit-box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
+     -moz-box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
+          box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
+}
+
 .App {
   font-family: "Roboto";
-  min-height: 100vh;
+  transition: margin-left .5s;
+  
+  margin-left: 16em;
 }
 
 .no-select {

@@ -1,14 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './styles.css';
 
-class Agenda extends Component {
-  render() {
-    return (
-      <div>
-      <h2 >Agenda</h2>
-      </div>
-    );
-  }
+import Header from './../../components/Header';
+
+function Agenda() {
+  const Agenda = () => (
+    <div className="agenda">
+      <h1 className="foo">Agenda</h1>
+    </div>
+  );
+
+  return (
+    <div className="App">
+      <Header />
+      <Agenda />
+    </div>
+  );
 }
 
 export default Agenda;
