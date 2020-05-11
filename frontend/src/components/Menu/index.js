@@ -2,15 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './styles.css';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCalendarAlt,
-  faBox,
-  faUsers,
-  faUsersCog,
-  faBars
-} from '@fortawesome/free-solid-svg-icons';
-
 function Menu(props) {
   const rotaAtual = atual => {
     if(props.rota === atual) {
@@ -24,17 +15,17 @@ function Menu(props) {
     const visibility = aberto ? 'visible' : 'hidden';
 
     return (
-      <FontAwesomeIcon
-        icon={faBars}
+      <i
+        className="fas fa-bars"
         onClick={exibirMenu}
-        style={{ visibility: visibility }} />
+        style={{ visibility: visibility }}></i>
     );
   };
   
-  const IconeAgenda = () => <FontAwesomeIcon icon={faCalendarAlt} />;
-  const IconeEstoque = () => <FontAwesomeIcon icon={faBox} />;
-  const IconeClientes = () => <FontAwesomeIcon icon={faUsers} />;
-  const IconeFuncionarios = () => <FontAwesomeIcon icon={faUsersCog} />;
+  const IconeAgenda = () => <i className="far fa-calendar-alt"></i>;
+  const IconeEstoque = () => <i className="fas fa-box"></i>;
+  const IconeClientes = () => <i className="fas fa-users"></i>;
+  const IconeFuncionarios = () => <i className="fas fa-users-cog"></i>;
 
   return (
     <aside>

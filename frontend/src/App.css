@@ -2,8 +2,7 @@
 @import "./css/fontes.css";
 
 html {
-  background-color: hsl(192, 15%, 94%);
-  
+  background-color:hsl(192, 15%, 94%); 
   min-height: 100vh;
   
   -webkit-box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
@@ -11,10 +10,14 @@ html {
           box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
 }
 
+body {
+  background-color: transparent !important;
+}
+
 .App {
   font-family: "Roboto";
   transition: margin-left .5s;
-  
+  background: transparent;
   margin-left: 16em;
 }
 

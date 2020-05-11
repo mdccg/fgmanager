@@ -1,22 +1,7 @@
-const produtos = [
-  {
-    codigo: '7 896190 012342',
-    nome: '',
-    marca: '',
-    modelo: '',
-  }
-];
+import axios from 'axios';
 
-const api = {
-  get: route => {
-    switch(route) {
-      case '/produtos':
-        return produtos;
-
-      default:
-        return [];
-    }
-  }
-};
+const api = axios.create({
+  baseURL: 'http://localhost:3001/'
+});
 
 export default api;

@@ -3,9 +3,6 @@ import './styles.css';
 
 import Menu from './../Menu';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCaretDown } from '@fortawesome/free-solid-svg-icons';
-
 import perfil from './../../tmp/foto-de-perfil.png';
 
 function Header() {
@@ -35,9 +32,7 @@ function Header() {
     
     const IconeMenu = () => (
       <div className="icone-menu" style={{ visibility: visibility }}>
-        <FontAwesomeIcon
-          icon={faBars}
-          onClick={exibirMenu} />
+        <i className="fas fa-bars" onClick={exibirMenu}></i>
       </div>
     );
     
@@ -50,7 +45,7 @@ function Header() {
   }
     
   const Usuario = props => {
-    const IconeAssets = () => <FontAwesomeIcon icon={faCaretDown} />;
+    const IconeAssets = () => <i className="fas fa-caret-down"></i>;
     
     return (
       <div className="usuario" onClick={props.onClick}>

@@ -7,7 +7,7 @@ aside div.menu {
   
   margin-bottom: 2em;
   
-  height: 4.5em;
+  height: 4em;
 }
 
 aside div.menu .fa-bars {
@@ -16,8 +16,8 @@ aside div.menu .fa-bars {
   cursor: pointer;
   color: white;
   
-  padding-left: 1em;
   padding-right: 1em;
+  padding-left: 1em;
 }
 
 aside {
@@ -56,11 +56,11 @@ aside li {
   transition: all .5s;
 }
 
-aside svg {
+aside i {
   padding-right: 1em;
 }
 
 aside a,
-aside svg {
+aside i {
   color: hsl(0, 0%, 30%);
 }
