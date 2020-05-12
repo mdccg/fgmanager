@@ -7,19 +7,23 @@ var cliente = new mongoose.Schema({
     },
     cpf: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     rg: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     telefone: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     email: {
         type: String,
-        required: false
+        required: false,
+        unique: true
     },
     endereco: {
         rua: {

@@ -1,5 +1,6 @@
 import Produto from './../models/produto';
 import Venda from './../models/venda';
+
 class venda {
 
     SalvarCompra(req, res) {

@@ -1,11 +1,12 @@
 {
-  "name": "FG-Telecom-backend",
+  "name": "FGTelecomBackend",
   "version": "0.0.0",
   "private": true,
   "main": "app.js",
   "scripts": {
     "start": "node ./bin/start",
-    "test": "mocha --recursive './test/*Test.js' --compilers js:babel-core/register"
+    "test": "mocha --recursive './test/*Test.js' --compilers js:babel-core/register",
+    "compile": "babel src --out-dir .compiled --source-maps --watch"
   },
   "dependencies": {
     "babel-core": "^6.25.0",

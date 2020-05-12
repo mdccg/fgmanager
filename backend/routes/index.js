@@ -1,7 +1,8 @@
 import express from 'express';
 import ClienteController from '../controllers/clientes';
 import ProdutoController from './../controllers/produto';
-import ModeloController from './../controllers/modelo';import VendaController from './../controllers/venda';
+import ModeloController from './../controllers/modelo';
+import VendaController from './../controllers/venda';
 
 const router = express.Router();
 let ctrlCliente = new ClienteController();
