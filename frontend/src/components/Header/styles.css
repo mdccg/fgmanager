@@ -1,16 +1,21 @@
 header {
-  justify-content: space-between;
+  /* todo position fixed */
+  
+  overflow-x: hidden;
   align-items: center;
-  display: flex;
+  justify-content: space-between;
 
-  background-color: #e74c3c;
+  display: flex !important;
+  padding-top: .25em !important;
+  padding-bottom: .25em !important;
+  
+  background-color: hsl(0, 0%, 20%);
 
-  padding: 0.25em 1.5em 0.25em;
   min-height: 4em;
 }
 
-header > div.logo {
-  flex-direction: column;
+header div.logo {
+  flex-direction: row;
   align-items: center;
   display: flex;
 
@@ -22,21 +27,26 @@ header > div.logo {
   color: white;
 }
 
-header > div.usuario {
+header div.usuario {
+  cursor: pointer;
+
   flex-direction: row;
   align-items: center;
   display: flex;
+
+  padding-right: 1.5em;
+}
+
+header div.logo span {
+  padding-left: 1em;
 }
 
 /* icones */
 
-.fa-bars {
+header .fa-bars {
   font-size: x-large;
-}
 
-header img.fg {
-  height: 2.25em;
-  width: 2.25em;
+  padding-left: 1em;
 }
 
 header img.perfil {
@@ -47,15 +57,16 @@ header img.perfil {
 
   background-color: white;
   border: 4px solid white;
+
   margin-right: 0.25em;
 }
 
-.fa-caret-down {
+header .fa-caret-down {
   font-size: x-large;
 }
 
-.fa-bars,
-.fa-caret-down {
+header .fa-bars,
+header .fa-caret-down {
   cursor: pointer;
   color: white;
 }
