@@ -5,45 +5,30 @@ class modelo {
         try {
             var obj = {
                 nome: req.body.nome,
-                marca: req.body.marca
             }
 
-            Modelo.find({nome: obj.nome}, (erro, nome) => {
-                if(erro) {
-                    return res.send({
-                        mensagem: 'O banco de dados está inativo no momento.\nTente novamente, mais tarde!',
-                        erro: true
+            Modelo.create(obj).then((modelo) => {
+                return res.status(200).send({
+                    mensagem: 'Salvo com sucesso!'
+                });
+            }, (erro) => {
+                if(erro.code === 11000) {
+                    return res.status(500).send({
+                        mensagem: 'Modelo já cadastrado.'
                     });
                 }
-
-                if(nome.length > 0) {
-                    return res.send({
-                        mensagem: 'Um modelo com o mesmo nome já existe!',
-                        erro: true
-                    });
-                }else{
-                    Modelo.create(obj).then((modelo) => {
-                        res.send({
-                            mensagem: 'Salvo com sucesso!',
-                            error: false
-                        });
-                    }, (erro) => {
-                        res.send({
-                            mensagem: 'Ocorreu um problema ao tentar salvar os dados: ' + erro,
-                            error: true
-                        });
-                    }).catch((e) => {
-                        res.send({
-                            mensagem: 'Ocorreu um erro de servidor: ' + erro,
-                            error: true
-                        });
-                    });
-                }
+                return res.status(500).send({
+                    mensagem: 'Ocorreu um problema ao tentar salvar o modelo. Tente novamente.'
+                });
+            }).catch((e) => {
+                return res.status(201).send({
+                    mensagem: 'Ocorreu um erro de servidor.'
+                });
             });
 
-        }catch(erro) {
+        } catch (erro) {
             console.log('erro: ' + erro);
-        } 
+        }
     }
 
     buscaTodos(req, res) {

@@ -1,7 +1,3 @@
-table, tr, td {
-  border: 1px solid black !important;
-}
-
 div.clientes {
   overflow-x: hidden;
 

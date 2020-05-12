@@ -7,12 +7,35 @@ div.estoque {
   padding: 2em;
   margin: 2em;
 
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   display: flex;
 }
 
-div.estoque h1.foo {
+div.estoque h1 {
   text-transform: uppercase;
   font-size: xx-large;
+  text-align: center;
   font-weight: bold;
+  
+  margin-bottom: 1em;
 }
+
+/* https://datatables.net/examples/basic_init/language.html */
+
+div.estoque .dataTables_wrapper {
+  width: 100%;
+}
+
+div.estoque .dataTables_length > label {
+  content: 'Show entries';
+}
+
+div.estoque .dataTables_filter > label {
+  content: 'Search';
+}
+
+div.estoque .dataTables_filter > label > input::placeholder {
+  content: 'Search';
+}
+

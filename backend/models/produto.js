@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 var produto = new mongoose.Schema({
     codigo: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     nome: {
         type: String,
@@ -14,7 +15,7 @@ var produto = new mongoose.Schema({
         required: true,
     },
     modelo: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         require: true,
     }
 });

@@ -2,8 +2,8 @@ import Produto from './../models/produto';
 
 class produto {
     novo(req, res) {
-        try{
-            
+        try {
+
             var obj = {
                 nome: req.body.nome,
                 marca: req.body.marca,
@@ -11,42 +11,37 @@ class produto {
                 codigo: req.body.codigo
             }
 
-            Produto.find({codigo: obj.codigo}, (erro, codigo) => {
-                if(erro) {
-                    return res.send({
-                        mensagem: 'O banco de dados está inativo no momento.\nTente novamente mais tarde!',
-                        erro: true
-                    });
+
+            Produto.create(obj).then((_produto) => {
+                return res.status(200).send({
+                    mensagem: 'Salvo com sucesso!'
+                });
+            }, (erro) => {
+
+                var dadoJaCadastrado = ''
+                if (erro.errmsg.indexOf("codigo") !== -1) {
+                    dadoJaCadastrado = "código"
                 }
-                
-                if(codigo.length > 0) {
-                    return res.send({
-                        mensagem: 'Um produto com o mesmo código já existe!',
-                        erro: true
-                    });
-                }else{
-                    Produto.create(obj).then((produto) => {
-                        return res.send({
-                            mensagem: 'Salvo com sucesso!',
-                            error: false
-                        });
-                    }, (erro) => {
-                        return res.send({
-                            mensagem: 'Ocorreu um problema ao tentar salvar os dados: ' + erro,
-                            error: true
-                        });
-                    }).catch((e) => {
-                        return res.send({
-                            mensagem: 'Ocorreu um erro de servidor: ' + erro,
-                            error: true
-                        });
-                    });
+
+                if(erro.code === 11000) {
+                    return res.status(500).send({
+                        mensagem: 'O ' + dadoJaCadastrado + ' de produto já foi cadastrado.'
+                    });    
                 }
+
+                return res.status(500).send({
+                    mensagem: 'Ocorreu um problema ao tentar salvar os dados: ' + erro
+                });
+            }).catch((e) => {
+                return res.status(201).send({
+                    mensagem: 'Ocorreu um erro de servidor: ' + erro
+                });
             });
 
-        }catch(e) {
+
+        } catch (e) {
             console.log(e)
-        }    
+        }
     }
 
     buscaTodos(req, res) {

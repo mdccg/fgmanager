@@ -3,11 +3,8 @@ var mongoose = require('mongoose');
 var modelo = new mongoose.Schema({
     nome: {
         type: String,
-        require: true
-    },
-    marca: {
-        type: String,
-        require: true
+        require: true,
+        unique: true
     }
 });
 
