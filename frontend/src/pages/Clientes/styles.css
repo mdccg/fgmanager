@@ -11,3 +11,25 @@ div.clientes {
 .title {
   background-color: red;
 }
+/* Titulo */
+.containerTitulo{
+  display: flex;
+  justify-content: center;
+}
+.titulo{
+  text-transform: uppercase;
+  font-size: xx-large;
+  font-weight: bold;
+}
+/* Alinhar botoes*/
+.alinhar{
+  display: flex;
+  flex-direction: row-reverse;
+  align-content: flex-end;
+}
+.botao{
+  padding-top: 25px;
+}
+.rotulo{
+  margin-bottom: 0;
+}
