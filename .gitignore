@@ -22,7 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/backend/node_modules
-backend/fgmanager-api
+fgmanager-api/node_modules
+fgmanager-api/fgmanager-api
 
 .vscode
