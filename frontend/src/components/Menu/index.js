@@ -1,66 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './styles.css';
 
-function Menu(props) {
-  const rotaAtual = atual => {
-    if(props.rota === atual) {
-      return 'rota-atual';
-    }
-  }
+class Menu extends Component {
+  render() {
+    const IconeMenu = () => {
+      const { aberto, exibirMenu } = this.props;
+      const visibility = aberto ? 'visible' : 'hidden';
+  
+      return (
+        <div className="menu">
+          <i
+            onClick={exibirMenu}
+            className="fas fa-bars"
+            style={{ visibility: visibility }}></i>
+        </div>
+      );
+    };
 
-  // componentes
-  const IconeMenu = () => {
-    const { aberto, exibirMenu } = props;
-    const visibility = aberto ? 'visible' : 'hidden';
+    const Ancora = props => {
+      const className = props.rota === window.location.pathname ? 'rota-atual' : '';
+
+      return (
+        <Link to={props.rota} className={className}>
+          <li>
+            <i className={props.icone}></i>
+            <span>{props.titulo}</span>
+          </li>
+        </Link>
+      );
+    }
 
     return (
-      <i
-        className="fas fa-bars"
-        onClick={exibirMenu}
-        style={{ visibility: visibility }}></i>
-    );
-  };
-  
-  const IconeAgenda = () => <i className="far fa-calendar-alt"></i>;
-  const IconeEstoque = () => <i className="fas fa-box"></i>;
-  const IconeClientes = () => <i className="fas fa-users"></i>;
-  const IconeFuncionarios = () => <i className="fas fa-users-cog"></i>;
-
-  return (
-    <aside>
-      <div className="menu">
+      <aside>
         <IconeMenu />
-      </div>
-      
-      <ul>
-        <Link to="/" className={rotaAtual('/')}>
-          <li>
-            <IconeAgenda />
-            <span>Agenda</span>
-          </li>
-        </Link>
-        <Link to="/estoque" className={rotaAtual('/estoque')}>
-          <li>
-            <IconeEstoque />
-            <span>Estoque</span>
-          </li>
-        </Link>
-        <Link to="/clientes" className={rotaAtual('/clientes')}>
-          <li>
-            <IconeClientes />
-            <span>Clientes</span>
-          </li>
-        </Link>
-        <Link to="/funcionarios" className={rotaAtual('/funcionarios')}>
-          <li>
-            <IconeFuncionarios />
-            <span>Funcionários</span>
-          </li>
-        </Link>
-      </ul>
-    </aside>
-  );
+        
+        <ul>
+          <Ancora rota="/" icone="far fa-calendar-alt" titulo="Agenda" />
+          <Ancora rota="/estoque" icone="fas fa-box" titulo="Estoque" />
+          <Ancora rota="/clientes" icone="fas fa-users" titulo="Clientes" />
+          <Ancora rota="/funcionarios" icone="fas fa-users-cog" titulo="Funcionários" />
+          <Ancora rota="/vendas" icone="fas fa-shopping-cart" titulo="Vendas" />
+        </ul>
+      </aside>
+    );
+  }
 }
 
 export default Menu;

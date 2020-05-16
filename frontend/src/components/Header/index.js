@@ -1,71 +1,66 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import './styles.css';
 
 import Menu from './../Menu';
 
-import perfil from './../../tmp/foto-de-perfil.png';
+class Header extends Component {
+  state = { aberto: true };
 
-function Header() {
-  const [aberto, setAberto] = useState(true);
-
-  // funções
-  const exibirMenu = () => {
+  exibirMenu = () => {
     let $ = any => document.querySelector(any);
 
-    const aside = $('aside'),
-          width = aberto ? '0' : '16em',
-     //  header = $('header'),
-            App = $('.App');
+    const { aberto } = this.state,
+                 App = $('.App'),
+               aside = $('aside'),
+               width = aberto ? '0' : '16em';
     
     aside.style.width = width;
     App.style.marginLeft = width;
 
-    setAberto(!aberto);
+    this.setState({ aberto: !aberto });
   }
 
-  const exibirOpcoes = () => alert('Abrindo opções...');
+  exibirOpcoes = () => alert(window.location.pathname);
 
-  // componentes
-  const Logo = () => {
-    const visibility = aberto ? 'hidden' : 'visible';
-    // const display = aberto ? 'none' : 'block';
-    
-    const IconeMenu = () => (
-      <div className="icone-menu" style={{ visibility: visibility }}>
-        <i className="fas fa-bars" onClick={exibirMenu}></i>
-      </div>
-    );
-    
+  render() {
+    const { aberto } = this.state;
+
+    const Logo = () => {
+      const visibility = aberto ? 'hidden' : 'visible'; // const display = aberto ? 'none' : 'block';
+      
+      return (
+        <div className="logo">
+          <div className="icone-menu" style={{ visibility: visibility }}>
+            <i className="fas fa-bars" onClick={this.exibirMenu}></i>
+          </div>
+
+          <span>FG-Telecom&trade;</span>
+        </div>
+      );
+    }
+
+    const Usuario = props => {
+      return (
+        <div className="usuario" onClick={props.onClick}>
+          <img
+            src={require('./../../tmp/foto-de-perfil.png')}
+            className="perfil"
+            alt="Perfil" />
+          
+          <i className="fas fa-caret-down"></i>
+        </div>
+      );
+    }
+
     return (
-      <div className="logo">
-        <IconeMenu />
-        <span>FG-Telecom&trade;</span>
-      </div>
+      <header className="no-select">
+        <Logo />
+        <Usuario onClick={this.exibirOpcoes} />
+
+        <Menu aberto={aberto} exibirMenu={this.exibirMenu} />
+      </header>
     );
   }
-    
-  const Usuario = props => {
-    const IconeAssets = () => <i className="fas fa-caret-down"></i>;
-    
-    return (
-      <div className="usuario" onClick={props.onClick}>
-        <img src={perfil} alt="Perfil" className="perfil" />
-        <IconeAssets />
-      </div>
-    );
-  }
-
-  return (
-    <header className="no-select">
-      <Logo />
-      <Usuario onClick={exibirOpcoes} />
-
-      <Menu
-        aberto={aberto}
-        exibirMenu={exibirMenu}
-        rota={window.location.pathname} />
-    </header>
-  );
 }
 
 export default Header;

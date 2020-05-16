@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import './styles.css';
 
-class Agenda extends Component {
+class Vendas extends Component {
   render() {
     return (
-      <main>
-        <h1>Agenda</h1>
+      <main className="vendas">
+        <h1>Vendas</h1>
       </main>
     );
   }
 }
 
-export default Agenda;
+export default Vendas;

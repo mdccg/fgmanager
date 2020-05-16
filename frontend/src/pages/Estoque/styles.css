@@ -1,24 +1,32 @@
-div.estoque {
-  overflow-x: hidden;
-
-  background-color: white;
-  border-radius: 4px;
-  min-height: 80vh;
-  padding: 2em;
-  margin: 2em;
-
-  flex-direction: column;
+.stacatto {
+  justify-content: space-between;
+  flex-direction: row;
   align-items: center;
+  text-align: center;
   display: flex;
+  width: 100%;
+
+  margin-bottom: 1em;
 }
 
-div.estoque h1 {
+.estoque h1 {
   text-transform: uppercase;
   font-size: xx-large;
   text-align: center;
   font-weight: bold;
-  
-  margin-bottom: 1em;
+}
+
+.estoque button.novo {
+  box-shadow: 0 1px 4px gray;
+  background-color: #3498db;
+  border-radius: 2px;
+  border: none;
+
+  padding: .25em .5em .25em;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: medium;
+  color: white;
 }
 
 /* https://datatables.net/examples/basic_init/language.html */
@@ -38,4 +46,3 @@ div.estoque .dataTables_filter > label {
 div.estoque .dataTables_filter > label > input::placeholder {
   content: 'Search';
 }
-

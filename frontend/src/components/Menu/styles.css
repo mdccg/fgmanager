@@ -38,8 +38,17 @@ aside a {
   font-size: large;
 }
 
+aside a:hover {
+  color: #333;
+}
+
 aside a.rota-atual li {
   border-left: .25em solid hsl(6, 78%, 57%);
+}
+
+aside a.rota-atual li i,
+aside a.rota-atual li span {
+  color: hsl(6, 78%, 57%);
 }
 
 aside li {
@@ -48,12 +57,10 @@ aside li {
   align-items: center;
   display: flex;
   
-  height: 4em;
-  
   padding-right: 8em;
   padding-left: 1em;
   
-  transition: all .5s;
+  height: 4em;
 }
 
 aside i {
