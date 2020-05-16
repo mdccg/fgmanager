@@ -16,17 +16,17 @@ class clientes {
                 endereco: req.body.endereco
             }
 
-            for (var key in data) {
-                console.log(key)
-                if (key !== 'endereco') {
-                    if (data[key] === '' || data[key] === undefined || data[key] === null) {
-                        return res.status(500).send({
-                            mensagem: 'Por favor preencha o campo ' + key + '!',
-                            dadosForm: data
-                        })
-                    }
-                }
-            }
+            // for (var key in data) {
+            //     console.log(key)
+            //     if (key !== 'endereco' && key !== 'email') {
+            //         if (data[key] === '' || data[key] === undefined || data[key] === null) {
+            //             return res.status(500).send({
+            //                 mensagem: 'Por favor preencha o campo ' + key + '!',
+            //                 dadosForm: data
+            //             })
+            //         }
+            //     }
+            // }
 
             for (var key in data) {
                 if (typeof data[key] === "string") {

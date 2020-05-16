@@ -17,6 +17,10 @@ var produto = new mongoose.Schema({
     modelo: {
         type: mongoose.Schema.Types.ObjectId,
         require: true,
+    },
+    smartCard: {
+        type: String,
+        require: true,
     }
 });
 

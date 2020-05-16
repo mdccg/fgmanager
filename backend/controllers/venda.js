@@ -6,32 +6,25 @@ class venda {
     SalvarCompra(req, res) {
         var objeto = {
             funcionario: req.body.funcionario,
-            cpf: req.body.cpf,
-            data: req.body.data,
             produtos: req.body.produtos,
         }
-        var id = req.body.id;
+
+        console.log(objeto)
 
         Venda.create(objeto)
-            .then((venda) => {
-                Produto.remove({ _id: { $in: id } }, (err, sucesso) => {
+            .then((_venda) => {
+                Produto.remove({ _id: { $in: objeto.produtos } }, (err, _sucesso) => {
                     if (err) {
-                        console.log("Deu merda")
+                        return res.status(500).json("Ocorreu um problema ao tentar finalizar venda.")
                     } else {
-                        console.log("Deu Bom")
+                        return res.status(200).json("Venda concluida com sucesso.")
                     }
                 })
             },
                 (erro) => {
-                    return res.send({
-                        mensagem: 'ocorreu um problema ao tentar salvar os dados: ' + erro,
-                        erro: true,
-                    })
+                    return res.status(500).json('ocorreu um problema ao tentar salvar os dados: ' + erro)
                 }).catch((e) => {
-                    return res.send({
-                        mensagem: 'ocorreu um erro de servidor: ' + e,
-                        erro: true,
-                    })
+                    return res.status(500).json('ocorreu um erro de servidor: ' + e)
                 })
     }
 

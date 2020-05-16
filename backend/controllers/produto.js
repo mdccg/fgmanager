@@ -8,7 +8,8 @@ class produto {
                 nome: req.body.nome,
                 marca: req.body.marca,
                 modelo: req.body.modelo,
-                codigo: req.body.codigo
+                codigo: req.body.codigo,
+                smartCard: req.body.smartCard
             }
 
 
@@ -45,8 +46,8 @@ class produto {
     }
 
     buscaTodos(req, res) {
-        Produto.find().then((produto) => {
-            res.send(produto);
+        Produto.find().then((produtos) => {
+            res.send(produtos);
         }, (erro) => {
             res.send('Ocorreu um erro: ' + erro);
         }).catch((e) => {

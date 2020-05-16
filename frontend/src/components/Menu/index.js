@@ -22,7 +22,7 @@ class Menu extends Component {
       const className = props.rota === window.location.pathname ? 'rota-atual' : '';
 
       return (
-        <Link to={props.rota} className={className}>
+        <Link to={props.rota} className={className} onClick={() => this.forceUpdate()}>
           <li>
             <i className={props.icone}></i>
             <span>{props.titulo}</span>

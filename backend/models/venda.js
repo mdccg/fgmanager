@@ -2,15 +2,12 @@ var mongoose = require('mongoose');
 
 var venda = new mongoose.Schema({
     funcionario:{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
-    cpf:{
-        type: String,
-        required: true
-    },
-    data:{
-        type: String,
+    datahora:{
+        type: Date,
+        default: new Date,
         required: true
     },
     produtos: {

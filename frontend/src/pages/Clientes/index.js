@@ -23,8 +23,10 @@ function cadastrar(event) {
   }
 
   api.post('/clientes/novo', form)
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
+    .then((response) => {
+      console.log(response)
+    })
+    .catch(error => console.log(error.response));
 }
 
 class Clientes extends Component {
