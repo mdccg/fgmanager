@@ -23,6 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 fgmanager-api/node_modules
-fgmanager-api/fgmanager-api
 
 .vscode
