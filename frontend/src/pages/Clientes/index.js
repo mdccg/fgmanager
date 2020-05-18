@@ -24,10 +24,11 @@ function cadastrar(event) {
 
   api.post('/clientes/novo', form)
     .then((response) => {
-      console.log(response)
+      console.log(response.data.mensagem)
     })
     .catch(error => console.log(error.response));
 }
+
 
 class Clientes extends Component {
   render() {
@@ -44,7 +45,7 @@ class Clientes extends Component {
               <div className="container">
                 <div className="row alinhar">
                   <div className="col-lg-4">
-                    <button type="button" name="listar" id="ilistar" class="float-right btn btn-warning btn-sm  ">Listar</button>
+                    <button type="button" name="listar" id="ilistar" className="float-right btn btn-warning btn-sm  ">Listar</button>
                   </div>
                 </div>
               </div>
@@ -52,57 +53,57 @@ class Clientes extends Component {
                 <div className="row">
                   <div className="col-lg-4">
                     <label className="rotulo">Nome completo</label>
-                    <input type="text" name="nome" id="inome" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="nome" id="inome" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Nº de CPF</label>
-                    <input type="text" name="cpf" id="icpf" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="cpf" id="icpf" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm"/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Nº de RG</label>
-                    <input type="text" name="rg" id="irg" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="rg" id="irg" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm"/>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-lg-4">
                     <label className="rotulo">Telefone</label>
-                    <input type="text" name="tel" id="itel" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="tel" id="itel" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">E-Mail</label>
-                    <input type="text" name="email" id="iemail" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="email" id="iemail" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Rua</label>
-                    <input type="text" name="rua" id="irua" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="rua" id="irua" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-lg-4">
                     <label className="rotulo">Nº de Rua</label>
-                    <input type="text" name="num_rua" id="inum_rua" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="num_rua" id="inum_rua" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Bairro</label>
-                    <input type="text" name="bairro" id="ibairro" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="bairro" id="ibairro" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Cidade</label>
-                    <input type="text" name="cidade" id="icidade" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="cidade" id="icidade" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
 
                 </div>
                 <div className="row ">
                   <div className="col-lg-4 ">
                     <label className="rotulo">CEP</label>
-                    <input type="text" name="cep" id="icep" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="cep" id="icep" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Ponto de referencia</label>
-                    <input type="text" name="ponto_referencia" id="iponto_referencia" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" />
+                    <input type="text" name="ponto_referencia" id="iponto_referencia" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                   <div className="col-lg-4 botao">
-                    <button type="submit" name="adicionar" id="iadicionar" class=" btn btn-block btn-success ">ADICIONAR</button>
+                    <button type="submit" name="adicionar" id="iadicionar" className=" btn btn-block btn-success ">ADICIONAR</button>
                   </div>
                 </div>
               </div>
