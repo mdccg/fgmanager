@@ -1,73 +1,93 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import './styles.css';
-
 import { MDBDataTable } from 'mdbreact';
+import { Link } from 'react-router-dom';
+
+import './styles.css';
 
 import api from './../../services/api';
 
-const DatatablePage = props => {
-  const data = {
-    columns: [
-      {
-        label: 'Código',
-        field: 'codigo',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'Nome',
-        field: 'nome',
-        sort: 'asc',
-        width: 270
-      },
-      {
-        label: 'Marca',
-        field: 'marca',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'Modelo',
-        field: 'modelo',
-        sort: 'asc',
-        width: 100
-      },
-      {
-        label: 'CRUD',
-        field: 'crud',
-        sort: 'asc',
-        width: 100
-      }
-    ],
-    rows: props.rows
-  };
-
-
-  return (
-    <MDBDataTable
-      hover
-      striped
-      bordered
-      responsive
-      data={data}
-      id="estoque" />
-  );
-}
-
 class Estoque extends Component {
   state = {
-    produtos: []
+    produtos: [],
+    modelos: []
   };
 
-  async componentDidMount() {
-    const response = await api.get('/estoque/produto');
+  getModeloById = id => {
+    try {
+      return this.state.modelos.filter(modelo => modelo._id === id)[0].nome;
     
-    this.setState({ produtos: response.data });
+    } catch(exception) {
+      console.error(
+        'TesteDeAlonsoError: NÃO ALTERNE ENTRE AS TELAS TÃO RÁPIDO!\n'
+        + '\tat Estoque.getModeloById (index.js:16)\n'
+        + '\tat CasaDoCaixaPrego.js (<anonymous>)\n'
+        + '\tat QuintoDosInferno.ts (<anonymous>)\n'
+        + '\tat LaOndeJudasPerdeuAsBotas.cs (baphomet.java:666)'
+      );
+    }
+  }
+
+  async componentDidMount() {
+    let produtos = await api.get('/estoque/produto');
+    let modelos = await api.get('/estoque/modelo');
+    
+    this.setState({ modelos: modelos.data });
+    
+    produtos.data.map(produto => produto.modelo = this.getModeloById(produto.modelo));
+    
+    this.setState({ produtos: produtos.data });
   }
 
   render() {
     const { produtos: rows } = this.state;
+
+    const DatatablePage = () => {
+      const data = {
+        columns: [
+          {
+            label: 'Código',
+            field: 'codigo',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'Nome',
+            field: 'nome',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Marca',
+            field: 'marca',
+            sort: 'asc',
+            width: 200
+          },
+          {
+            label: 'Modelo',
+            field: 'modelo',
+            sort: 'asc',
+            width: 100
+          },
+          {
+            label: 'CRUD',
+            field: 'crud',
+            sort: 'asc',
+            width: 100
+          }
+        ],
+        rows: rows
+      };
+    
+      return (
+        <MDBDataTable
+          hover
+          striped
+          bordered
+          responsive
+          data={data}
+          id="estoque" />
+      );
+    }
 
     return (
       <main className="estoque">

@@ -29,74 +29,28 @@
   color: white;
 }
 
-.cadastro-produtos form {
+.cadastro-produtos .form {
   justify-content: center;
-  flex-direction: row;
   display: flex;
 }
 
-.cadastro-produtos .coluna {
+.cadastro-produtos form { width: 70%; }
+
+.cadastro-produtos .row > .col {
   flex-direction: column;
-  width: fit-content;
   display: flex;
-}
-
-.cadastro-produtos .vazia {
-  width: 1.25em;
-}
-
-.cadastro-produtos label {
-  font-weight: bold;
-}
-
-.cadastro-produtos input,
-.cadastro-produtos .modelo {
-  border: none;
-
-  box-shadow: 0 1px 4px #bdc3c7;
-  border: 1px solid #bdc3c7;
-  padding-left: 16px;
+  
   margin-bottom: 1em;
-  height: 2.75em;
-  width: 16em;
-}
-
-.cadastro-produtos input[name='modelo'] {
-  box-shadow: none;
-  border: none;
-  
-  height: 2.625em;
-  width: 13em;
-}
-
-.cadastro-produtos .modelo {
-  padding-left: 0;
-  display: flex;
-}
-
-.cadastro-produtos .fa-search {
-  border-right: 1px solid #bdc3c7;
-  
-  align-items: center;
-  padding: 0 .75em 0;
-  width: fit-content;
-  display: flex;
-
-  font-size: large;
-  color: #bdc3c7;
-  cursor: pointer;
-}
-
-.cadastro-produtos input::placeholder {
-  color: #bdc3c7;
 }
 
 .cadastro-produtos input[type='submit'] {
+  border: none;
+  
   background-color: #2ecc71;
-
   text-transform: uppercase;
   font-weight: bold;
   color: white;
   
-  margin-top: 2em;
+  border-radius: .25em;
+  height: 3.5em;
 }

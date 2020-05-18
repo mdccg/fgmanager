@@ -2,43 +2,68 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './styles.css';
 
-const Form = () => (
-  <form>
-    <div className="coluna">
-      <label htmlFor="codigoAparelho">Código do aparelho</label>
-      <input type="text" name="codigoAparelho" placeholder="0 51000 01251 7" />
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
-      <label htmlFor="nome">Nome</label>
-      <input type="text" name="nome" placeholder="Moto G(6)" />
-      
-      <label htmlFor="marca">Marca</label>
-      <input type="text" name="marca" placeholder="Smartphone" />
-    </div>
+import api from './../../services/api';
 
-    <div className="coluna vazia"></div>
+const Form = props => (
+  <div className="form">
+    <form>
+      <div className="row">
+        <div className="col">
+          <TextField name="codigoAparelho" id="outlined-basic" label="Código" variant="outlined" />
+        </div>
 
-    <div className="coluna">
-      <label htmlFor="codigoSmartCard">Código do smart card</label>
-      <input type="text" name="codigoSmartCard" placeholder="No alto daquele cume..." />
-
-      <label htmlFor="modelo">Modelo</label>
-      <div className="modelo">
-        <i class="fas fa-search"></i>
-
-        <input type="text" name="modelo" placeholder="Buscar um modelo..." />
+        <div className="col">
+          <TextField name="codigoSmartCard" id="outlined-basic" label="Smart card" variant="outlined" />
+        </div>
       </div>
-      
-      <input type="submit" value="Adicionar" />
-    </div>
-  </form>
+
+      <div className="row">
+        <div className="col">
+          <TextField name="nome" id="outlined-basic" label="Nome" variant="outlined" />
+        </div>
+
+        <div className="col">
+          <Autocomplete
+            id="combo-box-demo"
+            options={props.modelos.map(modelo => ({ title: modelo.nome, modelo: modelo._id }))}
+            getOptionLabel={(option) => option.title}
+            renderInput={(params) => <TextField {...params} name="modelo" id="outlined-basic" label="Modelo" variant="outlined" />}
+          />
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col">
+          <TextField name="marca" id="outlined-basic" label="Marca" variant="outlined" />
+        </div>
+
+        <div className="col">
+          <input type="submit" value="Adicionar" />
+        </div>
+      </div>
+    </form>
+  </div>
 );
 
 class CadastroProdutos extends Component {
+  state = { modelos: [] };
+
+  async componentDidMount() {
+    const modelos = await api.get('/estoque/modelo');
+    
+    this.setState({ modelos: modelos.data });
+  }
+
   render() {
+    const { modelos } = this.state;
+
     return (
       <main className="cadastro-produtos">
         <section className="cabecalho">
-          <div></div>
+          <div style={{ padding: '.25em .5em .25em' }}></div>
           
           <h1>Cadastro de produto</h1>
 
@@ -47,7 +72,7 @@ class CadastroProdutos extends Component {
           </Link>
         </section>
 
-        <Form />
+        <Form modelos={modelos} />
       </main>
     );
   }

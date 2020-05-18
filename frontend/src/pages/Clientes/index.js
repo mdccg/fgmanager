@@ -23,10 +23,12 @@ function cadastrar(event) {
   }
 
   api.post('/clientes/novo', form)
-    .then((response) => {
-      console.log(response.data.mensagem)
-    })
-    .catch(error => console.log(error.response));
+    .catch(error => {
+      const { mensagem } = error.response.data;
+      console.log(mensagem); // TODO implementar modal aqui...
+      
+      /* https://material-ui.com/pt/components/modal/ */
+    });
 }
 
 
@@ -57,11 +59,11 @@ class Clientes extends Component {
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Nº de CPF</label>
-                    <input type="text" name="cpf" id="icpf" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm"/>
+                    <input type="text" name="cpf" id="icpf" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Nº de RG</label>
-                    <input type="text" name="rg" id="irg" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm"/>
+                    <input type="text" name="rg" id="irg" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
                   </div>
                 </div>
                 <div className="row">
