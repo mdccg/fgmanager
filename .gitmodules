@@ -1,0 +1,3 @@
+[submodule "fgmanager-api"]
+	path = fgmanager-api
+	url = https://github.com/RafaelCastro1002/fgmanager-api.git
