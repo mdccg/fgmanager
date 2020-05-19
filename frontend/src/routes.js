@@ -14,6 +14,8 @@ import Clientes from './pages/Clientes';
 import Funcionarios from './pages/Funcionarios';
 import Vendas from './pages/Vendas';
 
+import Teste from './pages/Teste';
+
 const routes = () => (
   <BrowserRouter>
     <Header />
@@ -25,6 +27,8 @@ const routes = () => (
       <Route exact path="/clientes" component={Clientes} />
       <Route exact path="/funcionarios" component={Funcionarios} />
       <Route exact path="/vendas" component={Vendas} />
+      
+      <Route exact path="/teste" component={Teste} />
     </Switch>
   </BrowserRouter>
 );

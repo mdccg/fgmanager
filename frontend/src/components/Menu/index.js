@@ -41,6 +41,8 @@ class Menu extends Component {
           <Ancora rota="/clientes" icone="fas fa-users" titulo="Clientes" />
           <Ancora rota="/funcionarios" icone="fas fa-users-cog" titulo="Funcionários" />
           <Ancora rota="/vendas" icone="fas fa-shopping-cart" titulo="Vendas" />
+          
+          <Ancora rota="/teste" icone="fas fa-vial" titulo="Teste" /> {/* TODO apagar depois */}
         </ul>
       </aside>
     );
