@@ -1,42 +1,89 @@
 import React, { Component } from 'react';
 import './styles.css';
 
+import ModalPage from './../../components/Modais/ModalPage';
+
 import api from './../../services/api';
 
-function cadastrar(event) {
-  event.preventDefault();
+// function cadastrar(event) {
+//   event.preventDefault();
   
-  const form = {
-    nome: document.getElementById("inome").value,
-    cpf: document.getElementById("icpf").value,
-    rg: document.getElementById("irg").value,
-    telefone: document.getElementById("itel").value,
-    email: document.getElementById("iemail").value,
-    endereco: {
-      rua: document.getElementById("irua").value,
-      numero: document.getElementById("inum_rua").value,
-      bairro: document.getElementById("ibairro").value,
-      cidade: document.getElementById("icidade").value,
-      cep: document.getElementById("icep").value,
-      pontoReferencia: document.getElementById("iponto_referencia").value,
-    }
-  }
+//   const form = {
+//     nome: document.getElementById("inome").value,
+//     cpf: document.getElementById("icpf").value,
+//     rg: document.getElementById("irg").value,
+//     telefone: document.getElementById("itel").value,
+//     email: document.getElementById("iemail").value,
+//     endereco: {
+//       rua: document.getElementById("irua").value,
+//       numero: document.getElementById("inum_rua").value,
+//       bairro: document.getElementById("ibairro").value,
+//       cidade: document.getElementById("icidade").value,
+//       cep: document.getElementById("icep").value,
+//       pontoReferencia: document.getElementById("iponto_referencia").value,
+//     }
+//   }
 
-  api.post('/clientes/novo', form)
-    .catch(error => {
-      const { mensagem } = error.response.data;
-      console.log(mensagem); // TODO implementar modal aqui...
-      
-      /* https://material-ui.com/pt/components/modal/ */
-    });
-}
+ // api.post('/clientes/novo', form)
+  //   .then((response) => {
+  //     console.log(response.data.mensagem)
+  //   })
+  //   .catch(error => console.log(error.response));
+  
+// }
 
 
 class Clientes extends Component {
+  state = {
+    modal: false,
+    message: 'Deu pau...'
+  };
+  toggle = message => {
+    this.setState({
+      modal: !this.state.modal,
+      message: message
+    });
+
+    setTimeout(() => {
+      this.setState({ modal: !this.state.modal });
+
+    }, 2000);
+  }
+
+  cadastrar(event) {
+    event.preventDefault();
+    
+    const form = {
+      nome: document.getElementById("inome").value,
+      cpf: document.getElementById("icpf").value,
+      rg: document.getElementById("irg").value,
+      telefone: document.getElementById("itel").value,
+      email: document.getElementById("iemail").value,
+      endereco: {
+        rua: document.getElementById("irua").value,
+        numero: document.getElementById("inum_rua").value,
+        bairro: document.getElementById("ibairro").value,
+        cidade: document.getElementById("icidade").value,
+        cep: document.getElementById("icep").value,
+        pontoReferencia: document.getElementById("iponto_referencia").value,
+      }
+    }
+  
+     api.post('/clientes/novo', form)
+    .then((response) => {
+      console.log(response.data.mensagem)
+    })
+    .catch(
+      error => this.toggle
+      
+      );
+    
+  }
   render() {
     return (
       <main>
-        <form onSubmit={(event) => cadastrar(event)}>
+        {/* <form onSubmit={(event) => cadastrar(event)}> */}
+        <form onSubmit={event => this.cadastrar(event)}>
           <div className="clientes">
             <div>
               <div className="containerTitulo">
@@ -59,11 +106,11 @@ class Clientes extends Component {
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Nº de CPF</label>
-                    <input type="text" name="cpf" id="icpf" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
+                    <input type="text" name="cpf" id="icpf" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm"/>
                   </div>
                   <div className="col-lg-4">
                     <label className="rotulo">Nº de RG</label>
-                    <input type="text" name="rg" id="irg" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required/>
+                    <input type="text" name="rg" id="irg" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm"/>
                   </div>
                 </div>
                 <div className="row">
@@ -112,6 +159,7 @@ class Clientes extends Component {
             </div>
           </div>
         </form>
+        <ModalPage modal={this.state.modal} message={this.state.message}/>
       </main>
     );
   }
