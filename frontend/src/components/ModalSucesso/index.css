@@ -1,13 +1,13 @@
-.size-padding-modal-erro{
+.size-padding-modal-sucesso{
     padding: 0.15em !important;
     padding-left: 0.5em !important;
 }
 
-.modal-header-erro-background{ 
-    background-color: #bf0a0a !important;
+.modal-header-sucesso-background{ 
+    background-color: #178a03 !important;
 }
 
-.title-header-modal-erro{
+.title-header-modal-sucesso{
     color: white !important;
     font-size: 1.1em;
     font-weight: bold !important;
@@ -15,7 +15,7 @@
 
 .text-mensagem{
     font-size: 1em;
-    color: #bf0a0a;
+    color: #106121;
     padding: 20px 30px !important;
     font-weight: 400;
 }

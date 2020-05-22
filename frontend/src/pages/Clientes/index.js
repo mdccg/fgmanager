@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import './styles.css';
 
-import ModalPage from './../../components/Modais/ModalPage';
-
 import api from './../../services/api';
 
 import ModalErro from '../../components/ModalErro';
-
-
+import ModalSucesso from '../../components/ModalSucesso';
 
 class Clientes extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      mensagemErro: null
+      mensagemErro: null,
+      mensagemSucesso: null
     }
   }
 
@@ -38,16 +36,22 @@ class Clientes extends Component {
     }
 
     api.post('/clientes/novo', form)
+      .then((sucesso) => {
+        const { mensagem } = sucesso.data;
+        this.setState({ mensagemSucesso: mensagem })
+      })
       .catch(error => {
         const { mensagem } = error.response.data;
         this.setState({ mensagemErro: mensagem })
-
-        /* https://material-ui.com/pt/components/modal/ */
       });
   }
 
   toggleMensagemErro() {
     this.setState({ mensagemErro: null })
+  }
+
+  toggleMensagemSucesso() {
+    this.setState({ mensagemSucesso: null })
   }
 
   render() {
@@ -129,6 +133,7 @@ class Clientes extends Component {
             </div>
           </div>
         </form>
+        <ModalSucesso mensagem={this.state.mensagemSucesso} rotaDeRetorno='clientes' toggle={() => this.toggleMensagemSucesso()} />
         <ModalErro mensagem={this.state.mensagemErro} toggle={() => this.toggleMensagemErro()} />
       </main>
     );

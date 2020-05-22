@@ -8,23 +8,8 @@ import {
 } from 'mdbreact';
 import './index.css';
 
+
 class Teste extends Component {
-  state = {
-    modal: false,
-    message: 'Deu pau...'
-  };
-
-  toggle = message => {
-    this.setState({
-      modal: !this.state.modal,
-      message: message
-    });
-
-    setTimeout(() => {
-      this.setState({ modal: !this.state.modal });
-
-    }, 2000);
-  }
 
   render() {
     return (
@@ -39,7 +24,7 @@ class Teste extends Component {
           </MDBModalFooter>
         </MDBModal>
 
-        
+
       </main>
     );
   }
