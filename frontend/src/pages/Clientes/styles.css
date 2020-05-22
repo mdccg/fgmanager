@@ -20,6 +20,9 @@
 .botao{
   padding-top: 25px;
 }
+.btn-adicionar-clientes{
+  padding: 9px !important;
+}
 .rotulo{
   margin-bottom: 0;
 }

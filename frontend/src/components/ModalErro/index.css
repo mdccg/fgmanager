@@ -1,0 +1,20 @@
+.size-padding-modal-erro{
+    padding: 0.15em !important;
+}
+
+.modal-header-erro-background{ 
+    background-color: #bf0a0a !important;
+}
+
+.title-header-modal-erro{
+    color: white !important;
+    font-size: 1.1em;
+    font-weight: bold !important;
+}
+
+.text-mensagem{
+    font-size: 1em;
+    color: #bf0a0a;
+    padding: 20px 30px !important;
+    font-weight: 400;
+}
