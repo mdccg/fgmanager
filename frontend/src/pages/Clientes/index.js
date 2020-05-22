@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './styles.css';
 
+import ModalPage from './../../components/Modais/ModalPage';
+
 import api from './../../services/api';
 
 import ModalErro from '../../components/ModalErro';
