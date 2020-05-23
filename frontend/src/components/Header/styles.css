@@ -1,9 +1,10 @@
 header {
-  transition: none;
   position: fixed;
   z-index: 1;
-  width: 80.2541%;
+  right: 0;
   top: 0;
+  
+  width: 100%;
   
   overflow-x: hidden;
   align-items: center;
