@@ -15,10 +15,11 @@ body {
 }
 
 .App {
-  font-family: "Roboto";
   transition: margin-left .5s;
   background: transparent;
   margin-left: 16em;
+  
+  font-family: "Roboto";
 }
 
 .no-select {
@@ -44,5 +45,7 @@ main {
   border-radius: 4px;
   min-height: 80vh;
   padding: 2em;
-  margin: 2vw;
+  
+  margin: 2em;
+  margin-top: 6em;
 }

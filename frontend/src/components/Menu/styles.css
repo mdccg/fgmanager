@@ -1,5 +1,6 @@
 aside div.menu {
-  justify-content: flex-start;
+  min-width: 20vw;
+  
   align-items: center;
   display: flex;
   

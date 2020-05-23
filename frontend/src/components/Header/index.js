@@ -12,10 +12,14 @@ class Header extends Component {
     const { aberto } = this.state,
                  App = $('.App'),
                aside = $('aside'),
-               width = aberto ? '0' : '16em';
+              header = $('header'),
+         aside_width = aberto ? '0' : '16em',
+        header_width = aberto ? '100%' : '80.2541%';
     
-    aside.style.width = width;
-    App.style.marginLeft = width;
+    aside.style.width = aside_width;
+    App.style.marginLeft = aside_width;
+    
+    header.style.width = header_width;
 
     this.setState({ aberto: !aberto });
   }
