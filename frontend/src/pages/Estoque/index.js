@@ -98,7 +98,7 @@ class Estoque extends Component {
         'TesteDeAlonsoError: NÃO ALTERNE ENTRE AS TELAS TÃO RÁPIDO!\n'
         + '\tat Estoque.getModeloById (index.js:16)\n'
         + '\tat CasaDoCaixaPrego.js (<anonymous>)\n'
-        + '\tat QuintoDosInferno.ts (<anonymous>)\n'
+        + '\tat QuintoDosInferno.ts (<anonymous>)\n' // bazinga
         + '\tat LaOndeJudasPerdeuAsBotas.cs (baphoMet.java:666)'
       );
     }
