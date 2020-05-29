@@ -1,8 +1,48 @@
-.estoque > .crud {
-  justify-content: center;
+.stacatto {
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
   display: flex;
+  width: 100%;
+
+  margin-bottom: 1em;
 }
 
-.estoque tr.selecionada {
-  background-color: gainsboro !important;
+.estoque h1 {
+  text-transform: uppercase;
+  font-size: xx-large;
+  text-align: center;
+  font-weight: bold;
+}
+
+.estoque button.novo {
+  box-shadow: 0 1px 4px gray;
+  background-color: #3498db;
+  border-radius: 2px;
+  border: none;
+
+  padding: .25em .5em .25em;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: medium;
+  color: white;
+}
+
+/* https://datatables.net/examples/basic_init/language.html */
+
+div.estoque .dataTables_wrapper {
+  width: 100%;
+}
+
+div.estoque .dataTables_length > label {
+  content: 'Show entries';
+}
+
+div.estoque .dataTables_filter > label {
+  content: 'Search';
+}
+
+div.estoque .dataTables_filter > label > input::placeholder {
+  content: 'Search';
 }
