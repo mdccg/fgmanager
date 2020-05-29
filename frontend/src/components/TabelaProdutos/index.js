@@ -40,9 +40,14 @@ const TabelaProdutos = ({ produtos: rows }) => {
 
   return (
     <MDBDataTable
+      hover
       striped
       bordered
-      hover
+      responsive
+      responsiveSm
+      responsiveMd
+      responsiveLg
+      responsiveXl
       data={data}
     />
   );

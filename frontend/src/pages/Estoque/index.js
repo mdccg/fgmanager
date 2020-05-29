@@ -1,10 +1,17 @@
-import React, { Component, Fragment } from 'react';
+import React, { useState, Component, Fragment } from 'react';
 import './styles.css';
 
 import TabelaProdutos from './../../components/TabelaProdutos';
 import api from './../../services/api';
 
-import { MDBBtn, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter, MDBIcon } from 'mdbreact';
+import {
+  MDBBtn,
+  MDBIcon,
+  MDBModal,
+  MDBModalBody,
+  MDBModalHeader,
+} from 'mdbreact';
+
 const isEmpty = object => Object.keys(object).length === 0 && object.constructor === Object;
 
 class Estoque extends Component {
@@ -15,7 +22,7 @@ class Estoque extends Component {
     modais: {
       cadastrar: false,
       editar: false,
-      apagar: false, 
+      apagar: false,
     },
   };
 
@@ -27,24 +34,58 @@ class Estoque extends Component {
     });
   }
 
-  cadastrar = event => {
+  cadastrarProduto = async event => {
     event.preventDefault();
     const atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
           produto = {};
 
     for(const atributo of atributos)
       produto[atributo] = event.target[atributo].value;
+    
+    const modelo = {};
+    modelo.nome = produto.modelo;
+    
+    try {
+      modelo._id = this.getModelo('nome', modelo.nome)._id;
+
+    } catch(exception) {
+      // TODO cadastrar modelo
+      await this.cadastrarModelo(modelo.nome);
+      modelo._id = this.getModelo('nome', modelo.nome)._id;
+    }
+    
+    produto.modelo = modelo._id;
 
     api.post('/estoque/produto/novo', produto)
       .then(response => console.log(response))
       .catch(error => console.error(error.response));
 
-    alert('pressione f5 caro usuario!!!');
     this.toggle('cadastrar');
+    alert('pressione f5 caro usuario!!!');
   }
 
-  editar = () => {
+  cadastrarModelo = async nome => {
+    await api.post('/estoque/modelo/novo', { nome: nome })
+      .then(response => console.log(response))
+      .catch(error => console.error(error.response));
+  }
 
+  editar = event => {
+    event.preventDefault();
+    const atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
+          produto = {};
+
+    for(const atributo of atributos)
+      produto[atributo] = event.target[atributo].value;
+    
+    const modelo = {};
+    modelo.nome = produto.modelo;
+    modelo._id = this.getModelo('nome', modelo.nome)._id;
+    
+    produto.modelo = modelo._id;
+
+    alert(JSON.stringify(produto));
+    this.toggle('editar');
   }
 
   apagar = () => {
@@ -88,11 +129,9 @@ class Estoque extends Component {
     select(tbody, codigo);
   }
 
-  getModeloById = _id => {
-    const { modelos } = this.state;
-
+  getModelo = (atributo, valor) => {
     try {
-      return this.state.modelos.filter(modelo => modelo._id === _id)[0];
+      return this.state.modelos.filter(modelo => modelo[atributo] === valor)[0];
     
     } catch(exception) {
       console.error(
@@ -121,7 +160,7 @@ class Estoque extends Component {
 
       const modelo = {};
       modelo._id = produto.modelo;
-try { modelo.nome = this.getModeloById(modelo._id).nome; } catch(exception) {}
+try { modelo.nome = this.getModelo('_id', modelo._id).nome; } catch(exception) {}
 
       return produto.modelo = modelo.nome;
     });
@@ -130,13 +169,13 @@ try { modelo.nome = this.getModeloById(modelo._id).nome; } catch(exception) {}
   }
 
   render() {
-    const { produtos, selecionado } = this.state;
+    const { modelos, produtos, selecionado, modais } = this.state;
 
-    const ModalCadastro = ({ isOpen, toggle }) => (
+    const ModalCadastro = ({ isOpen, toggle, modelos }) => (
       <MDBModal isOpen={isOpen} toggle={toggle}>
         <MDBModalHeader toggle={toggle}>Cadastrar produto</MDBModalHeader>
         <MDBModalBody>
-          <form onSubmit={event => this.cadastrar(event)} method="POST">
+          <form onSubmit={event => this.cadastrarProduto(event)} method="POST">
             <div className="form-group">
               <label htmlFor="nome">Nome</label>
               <input type="text" className="form-control" name="nome" placeholder="Moto G(6)" required />
@@ -149,7 +188,11 @@ try { modelo.nome = this.getModeloById(modelo._id).nome; } catch(exception) {}
 
             <div className="form-group">
               <label htmlFor="modelo">Modelo</label>
-              <input type="text" className="form-control" name="modelo" placeholder="Motorola" required />
+
+              <input type="text" className="form-control" name="modelo" list="modelos" autoComplete="off" placeholder="Motorola" required />
+              <datalist id="modelos">
+                {modelos.map(modelo => <option key={modelo._id} value={modelo.nome}>{modelo._id}</option>)}
+              </datalist>
             </div>
 
             <div className="form-group">
@@ -168,42 +211,81 @@ try { modelo.nome = this.getModeloById(modelo._id).nome; } catch(exception) {}
       </MDBModal>
     );
 
-    const ModalEdicao = ({ isOpen, toggle, selecionado }) => {
+    const ModalEdicao = ({ isOpen, toggle, selecionado, modelos }) => {
+      const [nome, setNome] = useState(selecionado.nome);
+      const [marca, setMarca] = useState(selecionado.marca);
+      const [modelo, setModelo] = useState(selecionado.modelo);
+      const [codigo, setCodigo] = useState(selecionado.codigo);
+      const [smartCard, setSmartCard] = useState(selecionado.smartCard);
+
       return (
         <MDBModal isOpen={isOpen} toggle={toggle}>
           <MDBModalHeader toggle={toggle}>Editar produto</MDBModalHeader>
           <MDBModalBody>
-            <form>
+            <form onSubmit={event => this.editar(event)}>
               <div className="form-group">
                 <label htmlFor="nome">Nome</label>
-                <input type="text" className="form-control" name="nome" placeholder="Moto G(6)" value={selecionado.nome} />
+                <input
+                  type="text"
+                  name="nome"
+                  value={nome}
+                  placeholder="Moto G(6)"
+                  className="form-control"
+                  onChange={event => setNome(event.target.value)} />
               </div>
 
               <div className="form-group">
                 <label htmlFor="marca">Marca</label>
-                <input type="text" className="form-control" name="marca" placeholder="Smartphone" value={selecionado.marca} />
+                <input
+                  type="text"
+                  name="marca"
+                  value={marca}
+                  placeholder="Smartphone"
+                  className="form-control"
+                  onChange={event => setMarca(event.target.value)} />
               </div>
 
               <div className="form-group">
                 <label htmlFor="modelo">Modelo</label>
-                <input type="text" className="form-control" name="modelo" placeholder="Motorola" value={selecionado.modelo} />
+                <input
+                  type="text"
+                  name="modelo"
+                  list="modelos"
+                  value={modelo}
+                  autoComplete="off"
+                  placeholder="Motorola"
+                  className="form-control"
+                  onChange={event => setModelo(event.target.value)} />
+                <datalist id="modelos">
+                  {modelos.map(modelo => <option key={modelo._id} value={modelo.nome}>{modelo._id}</option>)}
+                </datalist>
               </div>
 
               <div className="form-group">
                 <label htmlFor="codigo">Código</label>
-                <input type="text" className="form-control" name="codigo" placeholder="0 1234 5678 9" value={selecionado.codigo} />
+                <input
+                  type="text"
+                  name="codigo"
+                  value={codigo}
+                  placeholder="0 1234 5678 9"
+                  className="form-control"
+                  onChange={event => setCodigo(event.target.value)} />
               </div>
 
               <div className="form-group">
                 <label htmlFor="smartCard">Smart card</label>
-                <input type="text" className="form-control" name="smartCard" placeholder="40-02-89-22" value={selecionado.smartCard} />
+                <input
+                  type="text"
+                  name="smartCard"
+                  value={smartCard}
+                  placeholder="40-02-89-22"
+                  className="form-control"
+                  onChange={event => setSmartCard(event.target.value)} />
               </div>
 
+              <MDBBtn color="warning" type="submit">Salvar</MDBBtn>
             </form>
           </MDBModalBody>
-          <MDBModalFooter>
-              <MDBBtn color="info">Salvar</MDBBtn>
-          </MDBModalFooter>
         </MDBModal>
       );
     }
@@ -212,24 +294,30 @@ try { modelo.nome = this.getModeloById(modelo._id).nome; } catch(exception) {}
       <main className="estoque">
         <div className="crud">
           <Fragment>
-            <MDBBtn color="info" onClick={() => this.toggle('cadastrar')}>
-              <MDBIcon icon="plus" className="mr-1" /> Cadastrar
+            <MDBBtn color="success" onClick={() => this.toggle('cadastrar')}>
+              <MDBIcon icon="plus" />
             </MDBBtn>
+
             <ModalCadastro
-              isOpen={this.state.modais.cadastrar}
+              modelos={modelos}
+              isOpen={modais.cadastrar}
               toggle={() => this.toggle('cadastrar')} />
 
-            <MDBBtn color="info" onClick={() => this.toggle('editar')} disabled={isEmpty(selecionado)}>
-              <MDBIcon icon="pencil-alt" className="mr-1" /> Editar
+            <MDBBtn color="warning" onClick={() => this.toggle('editar')} disabled={isEmpty(selecionado)}>
+              <MDBIcon icon="pencil-alt" />
             </MDBBtn>
+
             <ModalEdicao
-              isOpen={this.state.modais.editar}
-              toggle={() => this.toggle('editar')}
-              selecionado={selecionado} />
+              modelos={modelos}
+              isOpen={modais.editar}
+              selecionado={selecionado}
+              toggle={() => this.toggle('editar')} />
 
             <MDBBtn color="danger" onClick={this.apagar} disabled={isEmpty(selecionado)}>
-              <MDBIcon icon="trash-alt" className="mr-1" /> Apagar
+              <MDBIcon icon="trash-alt" />
             </MDBBtn>
+
+            {/* ModalDelecao aqui */}
           </Fragment>
         </div>
 

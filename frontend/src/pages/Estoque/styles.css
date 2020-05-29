@@ -3,6 +3,17 @@
   display: flex;
 }
 
-.estoque tr.selecionada {
-  background-color: gainsboro !important;
+.estoque tr { cursor: pointer; }
+
+.estoque label { font-weight: bold; }
+
+.estoque input::placeholder { color: darkgrey; }
+
+.estoque tr.selecionada { background-color: #b2bec3 !important; }
+
+.estoque button[type='submit'] {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: large;
+  float: right;
 }
