@@ -25,7 +25,7 @@ aside {
   width: 16em;
   
   background-color: white;
-  overflow-x: hidden;
+  overflow: hidden;
   transition: .5s;
   position: fixed;
   height: 100%;
