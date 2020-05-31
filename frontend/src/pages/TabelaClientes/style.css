@@ -46,3 +46,15 @@
   div.estoque .dataTables_filter > label > input::placeholder {
     content: 'Search';
   }
+  /* Bõtes de ações */
+  .containerAcoe{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+  }
+  .containerAcoe button{
+    padding: 6px 12px; 
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+  

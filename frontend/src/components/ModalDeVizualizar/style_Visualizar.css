@@ -1,0 +1,21 @@
+.size-padding-modal-visualisar{
+    padding: 0.15em !important;
+    padding-left: 0.5em !important;
+}
+
+.modal-header-visualisar-background{ 
+    background-color: #4285f4 !important;
+}
+
+.modal-header-background{
+    color: white !important;
+    font-size: 1.1em;
+    font-weight: bold !important;
+}
+
+.text-mensagem-visualisar{
+    font-size: 1em;
+    color: black;
+    padding: 20px 30px !important;
+    font-weight: 400;
+}

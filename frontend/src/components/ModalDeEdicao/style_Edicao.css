@@ -1,0 +1,21 @@
+.size-padding-modal-Edicao{
+    padding: 0.15em !important;
+    padding-left: 0.5em !important;
+}
+
+.modal-header-Edicao-background{ 
+    background-color: #fb3 !important;
+}
+
+.title-header-modal-Edicao{
+    color: white !important;
+    font-size: 1.1em;
+    font-weight: bold !important;
+}
+
+.text-mensagem-Edicao{
+    font-size: 1em;
+    color: black;
+    padding: 20px 30px !important;
+    font-weight: 400;
+}
