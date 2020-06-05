@@ -1,44 +1,91 @@
 import React, { Component } from 'react';
-import {
-  MDBBtn,
-  MDBModal,
-  MDBModalHeader,
-  MDBModalBody,
-} from 'mdbreact';
-import './styles.css';
+
+import TabelaCrud from './../../components/TabelaCrud';
+
+import api from './../../services/api';
 
 class Teste extends Component {
   state = {
-    modal: false,
-    message: 'Deu pau...'
+    clientes: [],
+    selecionado: {}
   };
 
-  toggle = message => {
-    this.setState({
-      modal: !this.state.modal,
-      message: message
-    });
+  setSelecionado = selecionado => {
+    this.setState({ selecionado: selecionado });
+  }
 
-    setTimeout(() => {
-      this.setState({ modal: !this.state.modal });
+  create = () => {
+    alert('pressione f5 caro usuario!!!!');
+  }
 
-    }, 2000);
+  read = () => {
+    alert(JSON.stringify(this.state.selecionado));
+  }
+
+  update = () => {
+    alert(JSON.stringify(this.state.selecionado));
+  }
+
+  delete = () => {
+    alert(JSON.stringify(this.state.selecionado));
+  }
+
+  async componentDidMount() {
+    const clientes = (await api.get('/clientes')).data;
+    this.setState({ clientes: clientes });
   }
 
   render() {
+    const { clientes, selecionado } = this.state;
+
+    const crud = {
+      create: this.create,
+      read: this.read,
+      update: this.update,
+      delete: this.delete,
+    };
+
+    const rows = clientes;
+
+    const data = {
+      columns: [
+        {
+          label: '№ de CPF',
+          field: 'cpf',
+          sort: 'asc',
+          width: 270
+        },
+        {
+          label: 'Nome',
+          field: 'nome',
+          sort: 'asc',
+          width: 150
+        },
+        {
+          label: 'Endereço eletrônico',
+          field: 'email',
+          sort: 'asc',
+          width: 200
+        },
+        {
+          label: 'Telefone',
+          field: 'telefone',
+          sort: 'asc',
+          width: 100
+        }
+      ],
+      rows: rows
+    };
+
     return (
       <main>
-        <MDBModal isOpen={this.state.modal} toggle={this.toggle} size="sm">
-          <MDBModalHeader toggle={this.toggle}>Erro</MDBModalHeader>
-          <MDBModalBody>
-            {this.state.message}
-          </MDBModalBody>
-          {/* <MDBModalFooter>
-            <MDBBtn color="danger" size="sm" onClick={this.toggle}>Close</MDBBtn>
-          </MDBModalFooter> */}
-        </MDBModal>
-
-        <MDBBtn color="success" onClick={() => this.toggle('CPF inválido, seu mané!')}>Enviar dados inválidos</MDBBtn>
+        <TabelaCrud
+          crud={crud}
+          data={data}
+          tuplas={clientes}
+          identificador="cpf"
+          selecionado={selecionado}
+          setSelecionado={selecionado => this.setSelecionado(selecionado)} />
       </main>
     );
   }

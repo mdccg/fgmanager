@@ -1,0 +1,13 @@
+.crud {
+  justify-content: center;
+  flex-direction: row;
+  display: flex;
+}
+
+tr {
+  cursor: pointer;
+}
+
+.selecionada {
+  background-color: #b2bec3 !important;
+}
