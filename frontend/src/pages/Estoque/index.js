@@ -4,13 +4,7 @@ import './styles.css';
 import TabelaProdutos from './../../components/TabelaProdutos';
 import api from './../../services/api';
 
-import {
-  MDBBtn,
-  MDBIcon,
-  MDBModal,
-  MDBModalBody,
-  MDBModalHeader,
-} from 'mdbreact';
+import { MDBBtn, MDBIcon, MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
 
 const isEmpty = object => Object.keys(object).length === 0 && object.constructor === Object;
 
@@ -49,30 +43,30 @@ class Estoque extends Component {
       modelo._id = this.getModelo('nome', modelo.nome)._id;
 
     } catch(exception) {
-      // TODO cadastrar modelo
-      await this.cadastrarModelo(modelo.nome);
+      await api.post('/estoque/modelo/novo', { nome: modelo.nome })
+        .then(response => console.log(response))
+        .catch(error => console.error(error.response));
+      
+      this.setState({ modelos: (await api.get('/estoque/modelo')).data });
+
       modelo._id = this.getModelo('nome', modelo.nome)._id;
     }
     
     produto.modelo = modelo._id;
 
-    api.post('/estoque/produto/novo', produto)
+    await api.post('/estoque/produto/novo', produto)
       .then(response => console.log(response))
       .catch(error => console.error(error.response));
 
     this.toggle('cadastrar');
-    alert('pressione f5 caro usuario!!!');
+    window.location.pathname = '/estoque';
   }
 
-  cadastrarModelo = async nome => {
-    await api.post('/estoque/modelo/novo', { nome: nome })
-      .then(response => console.log(response))
-      .catch(error => console.error(error.response));
-  }
-
-  editar = event => {
+  editar = async event => {
     event.preventDefault();
-    const atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
+
+    const _id = this.state.produtos.filter(produto => produto.codigo === event.target.codigo.value)[0]._id,
+          atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
           produto = {};
 
     for(const atributo of atributos)
@@ -82,14 +76,29 @@ class Estoque extends Component {
     modelo.nome = produto.modelo;
     modelo._id = this.getModelo('nome', modelo.nome)._id;
     
-    produto.modelo = modelo._id;
+    produto.modelo = modelo._id; produto._id = _id;
 
-    alert(JSON.stringify(produto));
+    console.log(produto);
+
+    await api.post('/estoque/produto/editar', produto)
+      .then(response => console.log(response))
+      .catch(error => console.error(error.response));
+    
     this.toggle('editar');
+    window.location.pathname = '/estoque';
   }
 
-  apagar = () => {
-    console.log(this.state.selecionado);
+  apagar = async () => {
+    const { produtos, selecionado } = this.state;
+    
+    const _id = produtos.filter(produto => produto.codigo === selecionado.codigo)[0]._id;
+    
+    await api.post('/estoque/produto/remover', { id: _id })
+      .then(response => console.log(response))
+      .catch(error => console.error(error.response));
+    
+    this.toggle('apagar');
+    window.location.pathname = '/estoque';
   }
 
   selecionarProduto = codigo => {
