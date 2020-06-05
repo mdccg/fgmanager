@@ -1,0 +1,21 @@
+.size-padding-modal-Excluir{
+    padding: 0.15em !important;
+    padding-left: 0.5em !important;
+}
+
+.modal-header-Excluir-background{ 
+    background-color: #ff3547 !important;
+}
+
+.modal-header-background{
+    color: white !important;
+    font-size: 1.1em;
+    font-weight: bold !important;
+}
+
+.text-mensagem-Excluir{
+    font-size: 1em;
+    color: black;
+    padding: 20px 30px !important;
+    font-weight: 400;
+}
