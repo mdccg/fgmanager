@@ -8,86 +8,201 @@ import {
 } from 'mdbreact';
 import './style_Edicao.css';
 
+import isEquivalent from '../../funtions/compareObjects';
+
 
 class ModalDeEdicao extends Component {
+
+  carregarValoresNosInputs() {
+    for (var atributo in this.props.data) {
+      if (atributo === "endereco") {
+        for (var AtributoEndereco in this.props.data[atributo]) {
+          this.setState({ [AtributoEndereco]: this.props.data[atributo][AtributoEndereco] });
+        }
+        continue;
+      }
+      this.setState({ [atributo]: this.props.data[atributo] });
+    }
+  }
+
+  componentWillReceiveProps() {
+    this.carregarValoresNosInputs();
+  }
+
+  onChange(e) {
+    var value = e.target.value;
+    var key = e.target.name;
+    this.setState({ [key]: value })
+  }
+
+  CamposDeEndereco = () => {
+    if (this.props.data.endereco) {
+      return (
+        <div>
+          <div className="form-group">
+            <label className="rotulo">Rua</label>
+            <input
+              type="text"
+              name="endereco.rua"
+              id="inum_rua"
+              className="form-control"
+              aria-label="Large"
+              aria-describedby="inputGroup-sizing-sm"
+              value={this.props.data.endereco.rua}
+              onChange={(e) => this.props.onChange(e)}
+            />
+          </div>
+          <div className="form-group">
+            <label className="rotulo">Nº de Rua</label>
+            <input
+              type="text"
+              name="endereco.numero"
+              id="inum_rua"
+              className="form-control"
+              aria-label="Large"
+              aria-describedby="inputGroup-sizing-sm"
+              value={this.props.data.endereco.numero}
+              onChange={(e) => this.props.onChange(e)}
+            />
+          </div>
+          <div className="form-group">
+            <label className="rotulo">Bairro</label>
+            <input
+              type="text"
+              name="endereco.bairro"
+              id="ibairro"
+              className="form-control"
+              aria-label="Large"
+              aria-describedby="inputGroup-sizing-sm"
+              value={this.props.data.endereco.bairro}
+              onChange={(e) => this.props.onChange(e)}
+            />
+          </div>
+          <div className="form-group">
+            <label className="rotulo">Cidade</label>
+            <input
+              type="text"
+              name="endereco.cidade"
+              id="icidade"
+              className="form-control"
+              aria-label="Large"
+              aria-describedby="inputGroup-sizing-sm"
+              value={this.props.data.endereco.cidade}
+              onChange={(e) => this.props.onChange(e)}
+            />
+          </div>
+
+          <div className="form-group ">
+            <label className="rotulo">CEP</label>
+            <input
+              type="text"
+              name="endereco.cep"
+              id="icep"
+              className="form-control"
+              aria-label="Large"
+              aria-describedby="inputGroup-sizing-sm"
+              value={this.props.data.endereco.cep}
+              onChange={(e) => this.props.onChange(e)}
+            />
+          </div>
+          <div className="form-group">
+            <label className="rotulo">Ponto de referencia</label>
+            <input
+              type="text"
+              name="endereco.pontoReferencia"
+              id="iponto_referencia"
+              className="form-control"
+              aria-label="Large"
+              aria-describedby="inputGroup-sizing-sm"
+              value={this.props.data.endereco.pontoReferencia}
+              onChange={(e) => this.props.onChange(e)}
+            />
+          </div>
+        </div>
+      )
+    } else {
+      return <span></span>
+    }
+  }
 
   render() {
     return (
       <main>
-        <MDBModal isOpen={this.props.mensagem}  toggle={() => this.props.toggle()} size="lg">
-          <MDBModalHeader className="size-padding-modal-Edicao modal-header-Edicao-background"> <a className="title-header-modal-Edicao" onClick={() => this.props.toggle()}> <i class="fas fa-edit">Editar</i> </a> </MDBModalHeader>
-          <MDBModalBody className="text-mensagem-Edicao">
-          <form>
-          <div className="clientes">
-            <div>
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label className="rotulo">Nome completo</label>
-                    <input type="text" name="nome" id="inome" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Nº de CPF</label>
-                    <input type="text" name="cpf" id="icpf" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Nº de RG</label>
-                    <input type="text" name="rg" id="irg" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label className="rotulo">Telefone</label>
-                    <input type="text" name="tel" id="itel" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">E-Mail</label>
-                    <input type="text" name="email" id="iemail" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Rua</label>
-                    <input type="text" name="rua" id="irua" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label className="rotulo">Nº de Rua</label>
-                    <input type="text" name="num_rua" id="inum_rua" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Bairro</label>
-                    <input type="text" name="bairro" id="ibairro" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Cidade</label>
-                    <input type="text" name="cidade" id="icidade" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-
-                </div>
-                <div className="row ">
-                  <div className="col-lg-4 ">
-                    <label className="rotulo">CEP</label>
-                    <input type="text" name="cep" id="icep" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Ponto de referencia</label>
-                    <input type="text" name="ponto_referencia" id="iponto_referencia" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                </div>
+        <MDBModal isOpen={this.props.isOpen} toggle={() => this.props.toggle()}>
+          <MDBModalHeader toggle={() => this.props.toggle()} className="modal-header-Edicao-background"> <i class="fas fa-edit"></i> Editar </MDBModalHeader>
+          <form onSubmit={(e) => this.props.salvarDados(e)}>
+            <MDBModalBody className="barra-de-rolagem">
+              <div className="form-group">
+                <label htmlFor="nome">Nome</label>
+                <span className="required-style">*</span>
+                <input
+                  type="text"
+                  name="nome"
+                  value={this.props.data.nome}
+                  className="form-control"
+                  onChange={(e) => this.props.onChange(e)}
+                  required={true}
+                />
               </div>
-            </div>
-          </div>
-        </form>
-          </MDBModalBody>
-          <MDBModalFooter className="size-padding-modal-erro">
-          <MDBBtn color="success" size="sm" onClick={() => this.props.toggle()}>Salvar</MDBBtn>
-            <MDBBtn color="danger" size="sm" onClick={() => this.props.toggle()}>Canselar</MDBBtn>
-          </MDBModalFooter>
+
+              <div className="form-group">
+                <label htmlFor="marca">CPF</label>
+                <span className="required-style">*</span>
+                <input
+                  type="text"
+                  name="cpf"
+                  value={this.props.data.cpf}
+                  className="form-control"
+                  onChange={(e) => this.props.onChange(e)}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="modelo">RG</label>
+                <input
+                  type="text"
+                  name="rg"
+                  list="modelos"
+                  value={this.props.data.rg}
+                  autoComplete="off"
+                  className="form-control"
+                  onChange={(e) => this.props.onChange(e)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="codigo">Telefone</label>
+                <span className="required-style">*</span>
+                <input
+                  type="text"
+                  name="telefone"
+                  value={this.props.data.telefone}
+                  className="form-control"
+                  onChange={(e) => this.props.onChange(e)}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="smartCard">E-mail</label>
+                <span className="required-style">*</span>
+                <input
+                  type="text"
+                  name="email"
+                  value={this.props.data.email}
+                  className="form-control"
+                  onChange={(e) => this.props.onChange(e)}
+                />
+              </div>
+              <this.CamposDeEndereco />
+            </MDBModalBody>
+            <MDBModalFooter className="footer-modal-default-system">
+              {/* <MDBBtn color="danger" size="sm" onClick={() => this.props.toggle()}>Cancelar</MDBBtn> */}
+              <MDBBtn color="" style={{ background: "#FEBB33", color: "white" }} disabled={isEquivalent(this.props.data, this.props.dataOriginal)} size="sm" type="submit">Salvar</MDBBtn>
+            </MDBModalFooter>
+          </form>
         </MDBModal>
-
-        
-
-
       </main>
     );
   }

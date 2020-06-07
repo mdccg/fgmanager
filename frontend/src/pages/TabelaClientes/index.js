@@ -109,7 +109,7 @@ class TabelaClientes extends Component {
             );
         }
         return (
-            <main>
+            <main className="container-main-fgtelecom">
                 <section className="stacatto">
                     <div></div>
 

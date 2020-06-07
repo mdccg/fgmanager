@@ -56,7 +56,7 @@ class Clientes extends Component {
 
   render() {
     return (
-      <main>
+      <main className="container-main-fgtelecom">
         <form onSubmit={(event) => this.cadastrar(event)}>
           <div className="clientes">
             <div>

@@ -38,7 +38,7 @@ body {
           box-shadow: inset 0px 0px 140px -70px rgba(0, 0, 0, 0.75);
 }
 
-main {
+.container-main-fgtelecom {
   overflow-x: hidden;
   
   padding: 2em;
@@ -48,4 +48,9 @@ main {
   
   margin: 1vw;
   margin-top: 4.75em;
+}
+
+.required-style{
+  color: red;
+  margin-left: 0.1em;
 }

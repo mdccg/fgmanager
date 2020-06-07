@@ -10,7 +10,7 @@ const isEmpty = object => Object.keys(object).length === 0 && object.constructor
 
 class Estoque extends Component {
   state = {
-    produtos: [],
+    produtos: null,
     modelos: [],
     selecionado: {},
     modais: {
@@ -31,27 +31,27 @@ class Estoque extends Component {
   cadastrarProduto = async event => {
     event.preventDefault();
     const atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
-          produto = {};
+      produto = {};
 
-    for(const atributo of atributos)
+    for (const atributo of atributos)
       produto[atributo] = event.target[atributo].value;
-    
+
     const modelo = {};
     modelo.nome = produto.modelo;
-    
+
     try {
       modelo._id = this.getModelo('nome', modelo.nome)._id;
 
-    } catch(exception) {
+    } catch (exception) {
       await api.post('/estoque/modelo/novo', { nome: modelo.nome })
         .then(response => console.log(response))
         .catch(error => console.error(error.response));
-      
+
       this.setState({ modelos: (await api.get('/estoque/modelo')).data });
 
       modelo._id = this.getModelo('nome', modelo.nome)._id;
     }
-    
+
     produto.modelo = modelo._id;
 
     await api.post('/estoque/produto/novo', produto)
@@ -66,16 +66,16 @@ class Estoque extends Component {
     event.preventDefault();
 
     const _id = this.state.produtos.filter(produto => produto.codigo === event.target.codigo.value)[0]._id,
-          atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
-          produto = {};
+      atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
+      produto = {};
 
-    for(const atributo of atributos)
+    for (const atributo of atributos)
       produto[atributo] = event.target[atributo].value;
-    
+
     const modelo = {};
     modelo.nome = produto.modelo;
     modelo._id = this.getModelo('nome', modelo.nome)._id;
-    
+
     produto.modelo = modelo._id; produto._id = _id;
 
     console.log(produto);
@@ -83,30 +83,30 @@ class Estoque extends Component {
     await api.post('/estoque/produto/editar', produto)
       .then(response => console.log(response))
       .catch(error => console.error(error.response));
-    
+
     this.toggle('editar');
     window.location.pathname = '/estoque';
   }
 
   apagar = async () => {
     const { produtos, selecionado } = this.state;
-    
+
     const _id = produtos.filter(produto => produto.codigo === selecionado.codigo)[0]._id;
-    
+
     await api.post('/estoque/produto/remover', { id: _id })
       .then(response => console.log(response))
       .catch(error => console.error(error.response));
-    
+
     this.toggle('apagar');
     window.location.pathname = '/estoque';
   }
 
   selecionarProduto = codigo => {
     const undoSelect = tbody => {
-      for(const tr of tbody.querySelectorAll('tr')) {
+      for (const tr of tbody.querySelectorAll('tr')) {
         const className = tr.attributes.class;
-        if(!className) continue;
-        if(className.value === 'selecionada') {
+        if (!className) continue;
+        if (className.value === 'selecionada') {
           tr.classList.remove('selecionada');
           break;
         }
@@ -114,9 +114,9 @@ class Estoque extends Component {
     }
 
     const select = (tbody, codigo) => {
-      for(const tr of tbody.querySelectorAll('tr')) {
+      for (const tr of tbody.querySelectorAll('tr')) {
         const td_codigo = tr.querySelector('td').textContent;
-        if(td_codigo === codigo) tr.classList.add('selecionada');
+        if (td_codigo === codigo) tr.classList.add('selecionada');
       }
     }
 
@@ -125,10 +125,10 @@ class Estoque extends Component {
 
     const tbody = document.querySelector(`.estoque tbody[data-test='table-body']`);
 
-    if(!isEmpty(antigo)) {
+    if (!isEmpty(antigo)) {
       undoSelect(tbody);
 
-      if(antigo._id === selecionado._id) {
+      if (antigo._id === selecionado._id) {
         this.setState({ selecionado: {} });
         return;
       }
@@ -141,8 +141,8 @@ class Estoque extends Component {
   getModelo = (atributo, valor) => {
     try {
       return this.state.modelos.filter(modelo => modelo[atributo] === valor)[0];
-    
-    } catch(exception) {
+
+    } catch (exception) {
       console.error(
         'TesteDeAlonsoError: NÃO ALTERNE ENTRE AS TELAS TÃO RÁPIDO!\n'
         + '\tat Estoque.getModeloById (index.js:16)\n'
@@ -156,9 +156,9 @@ class Estoque extends Component {
   async componentDidMount() {
     let produtos = (await api.get('/estoque/produto')).data;
     let modelos = (await api.get('/estoque/modelo')).data;
-    
+
     this.setState({ modelos: modelos });
-    
+
     produtos.map(produto => {
       produto.clickEvent = event => {
         const tr = event.currentTarget;
@@ -169,11 +169,11 @@ class Estoque extends Component {
 
       const modelo = {};
       modelo._id = produto.modelo;
-try { modelo.nome = this.getModelo('_id', modelo._id).nome; } catch(exception) {}
+      try { modelo.nome = this.getModelo('_id', modelo._id).nome; } catch (exception) { }
 
       return produto.modelo = modelo.nome;
     });
-    
+
     this.setState({ produtos: produtos });
   }
 
@@ -300,7 +300,7 @@ try { modelo.nome = this.getModelo('_id', modelo._id).nome; } catch(exception) {
     }
 
     return (
-      <main className="estoque">
+      <main className="estoque container-main-fgtelecom">
         <div className="crud">
           <Fragment>
             <MDBBtn color="success" onClick={() => this.toggle('cadastrar')}>

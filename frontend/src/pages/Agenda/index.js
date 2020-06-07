@@ -4,7 +4,7 @@ import './styles.css';
 class Agenda extends Component {
   render() {
     return (
-      <main>
+      <main className="container-main-fgtelecom">
         <h1>Agenda</h1>
       </main>
     );

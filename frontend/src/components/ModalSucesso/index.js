@@ -21,15 +21,15 @@ class Teste extends Component {
     setTimeClose() {
         setTimeout(() => {
             this.props.toggle();
-            if(this.props.rotaDeRetorno) {
-                this.setState({ rotaDeRetorno: this.props.rotaDeRetorno }); 
+            if (this.props.rotaDeRetorno) {
+                this.setState({ rotaDeRetorno: this.props.rotaDeRetorno });
             }
         }, 1500);
     }
 
     render() {
 
-        if(this.props.mensagem) {
+        if (this.props.mensagem) {
             this.setTimeClose();
         }
 

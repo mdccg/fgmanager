@@ -25,20 +25,20 @@ class TabelaCrud extends Component {
     const { selecionado: antigo } = this.state;
 
     const deselecionarHtml = () => {
-      for(const tr of tbody.querySelectorAll('tr')) {
+      for (const tr of tbody.querySelectorAll('tr')) {
         const className = tr.attributes.class;
-        if(!className) continue;
-        if(className.value === 'selecionada') {
+        if (!className) continue;
+        if (className.value === 'selecionada') {
           tr.classList.remove('selecionada');
           return;
         }
       }
     }
-    
+
     const selecionarHtml = () => {
-      for(const tr of tbody.querySelectorAll('tr')) {
+      for (const tr of tbody.querySelectorAll('tr')) {
         const candidato = tr.querySelector('td').textContent;
-        if(candidato === valor) {
+        if (candidato === valor) {
           tr.classList.add('selecionada');
           return;
         }
@@ -47,7 +47,7 @@ class TabelaCrud extends Component {
 
     const novo = tuplas.filter(tupla => tupla[identificador] === valor)[0];
 
-    if(isVazio(selecionado)) {
+    if (isVazio(selecionado)) {
       this.setState({ selecionado: novo });
       setSelecionado(novo);
       selecionarHtml();
@@ -56,7 +56,7 @@ class TabelaCrud extends Component {
     } else {
       deselecionarHtml();
 
-      if(novo === antigo) {
+      if (novo === antigo) {
         this.setState({ selecionado: {} });
         setSelecionado({});
         return;
@@ -67,23 +67,48 @@ class TabelaCrud extends Component {
       selecionarHtml();
     }
   }
-  
+
   render() {
     const { crud, data, selecionado } = this.props;
 
-    data.rows.map(row => {
-      row.clickEvent = event => {
-        const tr = event.currentTarget;
-        const identificador = tr.querySelector('td').textContent;
+    if (data.rows) {
+      data.rows.map(row => {
+        row.clickEvent = event => {
+          const tr = event.currentTarget;
+          const identificador = tr.querySelector('td').textContent;
 
-        this.selecionar(identificador);
-      };
+          this.selecionar(identificador);
+        };
 
-      return row;
-    });
+        return row;
+      });
+    }
+
+    const dataLoading = {
+      columns: [
+        {
+          label: 'LOADING...',
+          field: 'loading',
+          sort: 'asc',
+          width: "100%",
+        }
+      ],
+      rows: [{
+        loading:
+          (
+            <div style={{ width: "100%", textAlign: "center" }}>
+              <div class="spinner-border text-center" style={{ width: "3rem", height: "3rem" }} role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          )
+      }]
+    };
+
+    const dataOnTable = data.rows ? data : dataLoading
 
     return (
-      <Fragment>
+      <div>
         <div className="crud">
           <MDBBtn color="success" onClick={crud.create}>
             <MDBIcon icon="plus" />
@@ -94,20 +119,20 @@ class TabelaCrud extends Component {
           </MDBBtn>
 
           <MDBBtn color="warning" onClick={crud.update} disabled={isVazio(selecionado)}>
-            <MDBIcon icon="fas fa-edit" />
+            <MDBIcon style={{ color: "white" }} icon="fas fa-edit" />
           </MDBBtn>
 
           <MDBBtn color="danger" onClick={crud.delete} disabled={isVazio(selecionado)}>
             <MDBIcon icon="fas fa-trash-alt" />
           </MDBBtn>
         </div>
-        
+
         <MDBDataTable
-          data={data}
+          data={dataOnTable}
           bordered
           striped
           hover />
-      </Fragment>
+      </div>
     );
   }
 }

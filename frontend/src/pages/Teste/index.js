@@ -6,7 +6,7 @@ import api from './../../services/api';
 
 class Teste extends Component {
   state = {
-    clientes: [],
+    clientes: null,
     selecionado: {}
   };
 
@@ -78,7 +78,7 @@ class Teste extends Component {
     };
 
     return (
-      <main>
+      <main className="container-main-fgtelecom">
         <TabelaCrud
           crud={crud}
           data={data}

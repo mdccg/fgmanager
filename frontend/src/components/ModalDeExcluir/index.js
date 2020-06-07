@@ -14,14 +14,14 @@ class ModalDeExcluir extends Component {
   render() {
     return (
       <main>
-        <MDBModal isOpen={this.props.mensagem} toggle={() => this.props.toggle()} size="lg">
-          <MDBModalHeader className="size-padding-modal-Excluir modal-header-Excluir-background"> <a className="modal-header-background" onClick={() => this.props.toggle()}> <i class="fas fa-trash-alt">Excluir</i> </a> </MDBModalHeader>
+        <MDBModal isOpen={this.props.isOpen} toggle={() => this.props.toggle()}>
+        <MDBModalHeader className="size-padding-modal-erro modal-header-Excluir-background">  <i class="fas fa-trash-alt"></i> Excluir </MDBModalHeader>
           <MDBModalBody className="text-mensagem-visualisar">
-          TEM CERTEZA QUE DESEJA EXCLUIR ESTE CLIENTE?
+            {this.props.mensagem}
           </MDBModalBody>
-          <MDBModalFooter className="text-mensagem-Excluir">
-            <MDBBtn color="success" size="sm" onClick={() => this.props.toggle()}>Sim</MDBBtn>
-            <MDBBtn color="danger" size="sm" onClick={() => this.props.toggle()}>Não</MDBBtn>
+          <MDBModalFooter className="size-padding-modal-erro">
+            <MDBBtn color="" style={{color: "white", background: "#F24847"}} size="sm" onClick={() => this.props.deletar()}>Sim</MDBBtn>
+            <MDBBtn color="" style={{color: "white", background: "#F24847"}} size="sm" onClick={() => this.props.toggle()}>Cancelar</MDBBtn>
           </MDBModalFooter>
         </MDBModal>
 
