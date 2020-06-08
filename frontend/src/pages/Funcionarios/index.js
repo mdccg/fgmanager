@@ -12,6 +12,9 @@ import ModalDeExcluir from '../../components/ModalDeExcluir';
 import ModalErro from '../../components/ModalErro';
 import ModalSucesso from '../../components/ModalSucesso';
 
+import "./styles.css"
+
+
 class Funcionarios extends Component {
 
   // constructor(props) {
@@ -225,13 +228,45 @@ class Funcionarios extends Component {
           setSelecionado={selecionado => this.setSelecionado(selecionado)}
         />
 
-        <ModalDeCadastrar isOpen={this.state.abrirModalCadastrar} camposImput={this.camposCadastro()} toggle={this.create} atualizarLista={() => this.BuscarFuncionarios()} />
-        <ModalDeVisualizar isOpen={this.state.abrirModalVisualizar} data={this.state.selecionado} toggle={this.read} />
-        <ModalDeEdicao onChange={(e) => this.onChange(e)} isOpen={this.state.abrirModalEditar} data={this.state.editarSelecionado} dataOriginal={this.state.selecionado} toggle={this.update} salvarDados={() => this.SalvarDados()} />
-        <ModalDeExcluir isOpen={this.state.abrirModalErro} toggle={this.delete} mensagem='Tem certeza que deseja excluir o funcionário?' deletar={() => this.deletar()} />
+        <ModalDeCadastrar
+          isOpen={this.state.abrirModalCadastrar}
+          camposImput={this.camposCadastro()}
+          toggle={this.create}
+          atualizarLista={() => this.BuscarFuncionarios()}
+          rotaDeCadastro="/funcionarios/novo"
+        />
 
-        <ModalSucesso mensagem={this.state.mensagemSucesso} toggle={() => this.toggleMensagemSucesso()} />
-        <ModalErro mensagem={this.state.mensagemErro} toggle={() => this.toggleMensagemErro()} />
+        <ModalDeVisualizar
+          isOpen={this.state.abrirModalVisualizar}
+          data={this.state.selecionado}
+          toggle={this.read}
+        />
+
+        <ModalDeEdicao
+          onChange={(e) => this.onChange(e)}
+          isOpen={this.state.abrirModalEditar}
+          data={this.state.editarSelecionado}
+          dataOriginal={this.state.selecionado}
+          toggle={this.update}
+          salvarDados={() => this.SalvarDados()}
+        />
+
+        <ModalDeExcluir
+          isOpen={this.state.abrirModalErro}
+          toggle={this.delete}
+          mensagem='Tem certeza que deseja excluir o funcionário?'
+          deletar={() => this.deletar()}
+        />
+
+        <ModalSucesso
+          mensagem={this.state.mensagemSucesso}
+          toggle={() => this.toggleMensagemSucesso()}
+        />
+
+        <ModalErro
+          mensagem={this.state.mensagemErro}
+          toggle={() => this.toggleMensagemErro()}
+        />
       </main>
     );
   }

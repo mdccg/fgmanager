@@ -56,7 +56,7 @@ class ModalDeVizualizar extends Component {
 
     const dados = this.reorganizarCampos(this.state.data)
 
-    api.post('/funcionarios/novo', dados)
+    api.post(this.props.rotaDeCadastro, dados)
       .then((sucesso) => {
         const { mensagem } = sucesso.data;
         this.setState({ mensagemSucesso: mensagem });

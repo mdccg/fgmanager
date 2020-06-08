@@ -8,6 +8,8 @@ import {
 } from 'mdbreact';
 import './style_Visualizar.css';
 
+// import cursorClose from '../../tmp/cursor-close.png'
+
 
 class ModalDeVizualizar extends Component {
 
