@@ -77,7 +77,6 @@ class ModalDeVizualizar extends Component {
       })
       .catch(error => {
         const { mensagem } = error.response.data;
-        console.log(error.response.data)
         this.setState({ mensagemErro: mensagem });
       });
   }
