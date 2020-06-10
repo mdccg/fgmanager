@@ -39,12 +39,12 @@ class ModalDeVizualizar extends Component {
       campo = campo;
       console.log(campo)
 
-      if(campo === "senha" || campo === "confirmar.Senha") {
-        if(dados['senha'].value !== dados['confirmar.Senha'].value) {
-          return this.setState({mensagemErro: "As senhas têm que ser idênticas"});
+      if (campo === "senha" || campo === "confirmar.Senha") {
+        if (dados['senha'].value !== dados['confirmar.Senha'].value) {
+          return this.setState({ mensagemErro: "As senhas têm que ser idênticas" });
         }
 
-        if(campo === "confirmar.Senha") {
+        if (campo === "confirmar.Senha") {
           continue
         }
       }
@@ -150,10 +150,16 @@ class ModalDeVizualizar extends Component {
           <div className="form-group">
             <label className="rotulo">{FirstLetterUpperCase(campo.replace(/\./g, " "))}</label>
             <span className={this.state.data[campo].required ? "required-style" : "none-style"}>*</span>
-            <select required={camposImput[campo].required} name={campo} value={this.state.data[campo].value === "" ? null : this.state.data[campo].value} onChange={(e) => this.onChange(e)} className="browser-default custom-select">
-              <option>{camposImput[campo].descricao}</option>
+            <select
+              required={true}
+              name={campo}
+              value={this.state.data[campo].value}
+              onChange={(e) => this.onChange(e)}
+              className="browser-default custom-select"
+            >
+              <option value="">{camposImput[campo].descricao}</option>
               {camposImput[campo].options.map((option, key) => {
-                return(<option key={key} value={option}>{FirstLetterUpperCase(option)}</option>)
+                return (<option key={key} value={option}>{FirstLetterUpperCase(option)}</option>)
               })}
             </select>
           </div>

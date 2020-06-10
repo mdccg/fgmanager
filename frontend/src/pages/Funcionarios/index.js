@@ -81,12 +81,14 @@ class Funcionarios extends Component {
     api.post('/funcionarios/editar', this.state.editarSelecionado)
       .then((sucesso) => {
         const { mensagem } = sucesso.data;
-        this.setState({ mensagemSucesso: mensagem });
+        console.log(sucesso.data)
+        this.setState({ mensagemSucesso: mensagem, selecionado: this.state.editarSelecionado });
         this.BuscarFuncionarios();
         this.update();
       })
       .catch(error => {
         const { mensagem } = error.response.data;
+        console.log(error)
         this.setState({ mensagemErro: mensagem });
       });
   }
@@ -265,7 +267,7 @@ class Funcionarios extends Component {
           data={this.state.editarSelecionado}
           dataOriginal={this.state.selecionado}
           toggle={this.update}
-          salvarDados={() => this.SalvarDados()}
+          salvarDados={(e) => this.SalvarDados(e)}
         />
 
         <ModalDeExcluir

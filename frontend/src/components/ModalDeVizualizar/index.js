@@ -8,8 +8,7 @@ import {
 } from 'mdbreact';
 import './style_Visualizar.css';
 
-// import cursorClose from '../../tmp/cursor-close.png'
-
+import FirstLetterUpperCase from '../../funtions/firstLetterUpperCase';
 
 class ModalDeVizualizar extends Component {
 
@@ -135,6 +134,54 @@ class ModalDeVizualizar extends Component {
     }
   }
 
+  createInputs() {
+    const dados = this.props.data;
+    var inputs = []
+    for (var key in dados) {
+      if (key.toLocaleLowerCase() !== "_id" && key.toLocaleLowerCase() !== "__v" && key.toLocaleLowerCase() !== "clickevent" && key.toLocaleLowerCase() !== "usuario") {
+        if (typeof dados[key] === "array") {
+          const inArray = dados[key]
+          for (var i in inArray) {
+            inputs.push((
+              <div className="form-group">
+                <label htmlFor="nome">{i === "pontoReferencia" ? "Ponto Referencia" : FirstLetterUpperCase(i)}</label>
+                <input
+                  type="text"
+                  disabled
+                  value={inArray[i]}
+                  className="form-control"
+                />
+              </div>
+            ))
+          }
+          continue
+        }
+
+        inputs.push((
+          <div className="form-group">
+            <label htmlFor="nome">{FirstLetterUpperCase(key)}</label>
+            <input
+              type="text"
+              disabled
+              value={dados[key]}
+              className="form-control"
+            />
+          </div>
+        ))
+      }
+    }
+
+    return inputs
+  }
+
+  renderInputs() {
+    var inputs = this.createInputs();
+
+    return inputs.map((input, key) => {
+      return <div key={key}>{input}</div>
+    })
+  }
+
   render() {
 
     return (
@@ -142,7 +189,7 @@ class ModalDeVizualizar extends Component {
         <MDBModal isOpen={this.props.isOpen} toggle={() => this.props.toggle()}>
           <MDBModalHeader toggle={() => this.props.toggle()} className="modal-header-visualisar-background"> <i class="far fa-eye"></i> Visualizar </MDBModalHeader>
           <MDBModalBody className="barra-de-rolagem">
-            <div className="form-group">
+            {/* <div className="form-group">
               <label htmlFor="nome">Nome</label>
               <input
                 type="text"
@@ -203,10 +250,11 @@ class ModalDeVizualizar extends Component {
                 className="form-control"
               />
             </div>
-            <this.CamposDeEndereco />
+            <this.CamposDeEndereco /> */}
+            {this.renderInputs()}
           </MDBModalBody>
           <MDBModalFooter className="footer-modal-default-system">
-            <MDBBtn color="" style={{background: "#33B5E5", color: "white"}} size="sm" onClick={() => this.props.toggle()}>Fechar</MDBBtn>
+            <MDBBtn color="" style={{ background: "#33B5E5", color: "white" }} size="sm" onClick={() => this.props.toggle()}>Fechar</MDBBtn>
           </MDBModalFooter>
         </MDBModal>
       </main>
