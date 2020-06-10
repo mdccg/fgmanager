@@ -13,6 +13,8 @@ import api from './../../services/api';
 import ModalErro from '../../components/ModalErro';
 import ModalSucesso from '../../components/ModalSucesso';
 
+import FirstLetterUpperCase from '../../funtions/firstLetterUpperCase';
+
 class ModalDeVizualizar extends Component {
 
   state = {
@@ -34,24 +36,34 @@ class ModalDeVizualizar extends Component {
     const dadosReorganizados = {}
 
     for (var campo in dados) {
+      campo = campo;
+      console.log(campo)
 
-      if (campo === "endereco") {
+      if(campo === "senha" || campo === "confirmar.Senha") {
+        if(dados['senha'].value !== dados['confirmar.Senha'].value) {
+          return this.setState({mensagemErro: "As senhas têm que ser idênticas"});
+        }
+
+        if(campo === "confirmar.Senha") {
+          continue
+        }
+      }
+
+      if (campo.toLocaleLowerCase() === "endereco") {
         var dadosEndereco = dados[campo];
 
         for (var camposEndereco in dadosEndereco) {
-          dadosReorganizados[campo] = { ...dadosReorganizados[campo], [camposEndereco]: dadosEndereco[camposEndereco].value }
+          dadosReorganizados[campo] = { ...dadosReorganizados[campo], [camposEndereco.replace(/\./g, "")]: dadosEndereco[camposEndereco].value }
         }
         continue
       }
 
-      dadosReorganizados[campo] = dados[campo].value
-
+      dadosReorganizados[campo.replace(/\./g, "")] = dados[campo].value
     }
     return dadosReorganizados
   }
 
   SalvarDados(e) {
-
     e.preventDefault()
 
     const dados = this.reorganizarCampos(this.state.data)
@@ -65,6 +77,7 @@ class ModalDeVizualizar extends Component {
       })
       .catch(error => {
         const { mensagem } = error.response.data;
+        console.log(error.response.data)
         this.setState({ mensagemErro: mensagem });
       });
   }
@@ -76,11 +89,11 @@ class ModalDeVizualizar extends Component {
     for (var key in camposImput) {
       if (camposImput[key].name === "endereco") {
         for (var i in camposImput[key].camposDeEndereco) {
-          endereco = { ...endereco, [camposImput[key].camposDeEndereco[i].name]: { value: "", type: camposImput[key].camposDeEndereco[i].type, required: camposImput[key].camposDeEndereco[i].required} }
+          endereco = { ...endereco, [camposImput[key].camposDeEndereco[i].name]: { value: "", type: camposImput[key].camposDeEndereco[i].type, required: camposImput[key].camposDeEndereco[i].required } }
         }
         continue;
       }
-      setState = { ...setState, [camposImput[key].name]: { value: "", type: camposImput[key].type, required: camposImput[key].required } };
+      setState = { ...setState, [camposImput[key].name]: { value: "", type: camposImput[key].type, required: camposImput[key].required, descricao: camposImput[key].descricao, options: camposImput[key].options } };
     }
 
     setState.endereco = endereco;
@@ -93,8 +106,8 @@ class ModalDeVizualizar extends Component {
     var value = e.target.value
 
     if (name.indexOf("endereco") !== -1) {
-      name = name.split(".");
-      this.setState({ data: { ...this.state.data, endereco: { ...this.state.data.endereco, [name[1]]: { ...this.state.data.endereco[name[1]], value: value } } } },
+      name = name.replace("endereco.", "");
+      this.setState({ data: { ...this.state.data, endereco: { ...this.state.data.endereco, [name]: { ...this.state.data.endereco[name], value: value } } } },
         () => this.carregarInputs())
       return
     }
@@ -113,8 +126,8 @@ class ModalDeVizualizar extends Component {
           var camposImputEderenco = camposImput[campo]
           inputs.push((
             <div className="form-group">
-              <label className="rotulo">{campoEndereco === "pontoReferencia" ? "ponto de referência".toUpperCase() : campoEndereco.toUpperCase()}</label>
-              <span className={this.state.data[campo].required ? "required-style" : ""}>*</span>    
+              <label className="rotulo">{FirstLetterUpperCase(campoEndereco.replace(/\./g, " "))}</label>
+              <span className={this.state.data[campo].required ? "required-style" : "none-style"}>*</span>
               <input
                 type={camposImputEderenco[campoEndereco].type}
                 name={"endereco." + campoEndereco}
@@ -133,23 +146,45 @@ class ModalDeVizualizar extends Component {
         continue;
       }
 
-      inputs.push((
-        <div className="form-group">
-          <label className="rotulo">{campo.toUpperCase()}</label>
-          <span className={this.state.data[campo].required ? "required-style" : ""}>*</span>
-          <input
-            type={camposImput[campo].type}
-            name={campo}
-            id={campo}
-            className="form-control"
-            aria-label="Large"
-            aria-describedby="inputGroup-sizing-sm"
-            value={this.state.data[campo].value}
-            onChange={(e) => this.onChange(e)}
-            required={this.state.data[campo].required}
-          />
-        </div>
-      ))
+      if (camposImput[campo].type === "select") {
+        inputs.push((
+          <div className="form-group">
+            <label className="rotulo">{FirstLetterUpperCase(campo.replace(/\./g, " "))}</label>
+            <span className={this.state.data[campo].required ? "required-style" : "none-style"}>*</span>
+            <select required={camposImput[campo].required} name={campo} value={this.state.data[campo].value === "" ? null : this.state.data[campo].value} onChange={(e) => this.onChange(e)} className="browser-default custom-select">
+              <option>{camposImput[campo].descricao}</option>
+              {camposImput[campo].options.map((option, key) => {
+                return(<option key={key} value={option}>{FirstLetterUpperCase(option)}</option>)
+              })}
+            </select>
+          </div>
+        ))
+
+        continue;
+      } else {
+
+        inputs.push((
+          <div className="form-group">
+            {/* 
+            A função FirstLetterUpperCase() transforma todas as primeiras
+            letras da palavra em maiúsculas e o restante permanece minúscula. 
+          */}
+            <label className="rotulo">{FirstLetterUpperCase(campo.replace(/\./g, " "))}</label>
+            <span className={this.state.data[campo].required ? "required-style" : "none-style"}>*</span>
+            <input
+              type={camposImput[campo].type}
+              name={campo}
+              id={campo}
+              className="form-control"
+              aria-label="Large"
+              aria-describedby="inputGroup-sizing-sm"
+              value={this.state.data[campo].value}
+              onChange={(e) => this.onChange(e)}
+              required={this.state.data[campo].required}
+            />
+          </div>
+        ))
+      }
     }
 
     this.setState({ inputs })

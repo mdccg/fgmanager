@@ -55,6 +55,10 @@ body {
   margin-left: 0.1em;
 }
 
+.none-style{
+  display: none;
+}
+
 /* url('../../tmp/cursor-close-white.png') */
 .modal{
   cursor: url('../src/tmp/cursor-close-white.png'), pointer;

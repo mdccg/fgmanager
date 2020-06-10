@@ -121,6 +121,23 @@ class Funcionarios extends Component {
         required: true
       },
       {
+        name: "senha",
+        type: "password",
+        required: true
+      },
+      {
+        name: "confirmar.Senha",
+        type: "password",
+        required: true
+      },
+      {
+        name: "tipo",
+        type: "select",
+        descricao: "Escolha o tipo de funcionário",
+        required: true,
+        options: ["almoxarife", "técnico"]
+      },
+      {
         name: "cpf",
         type: "text",
         required: true
@@ -133,13 +150,13 @@ class Funcionarios extends Component {
       {
         name: "telefone",
         type: "text",
-        required: true
+        required: false
       },
       {
         name: "email",
         type: "text",
         required: true
-      }
+      },
       // Se precisar de campos para endereco, tem abaixo o modelo, o componente de modal já aceita esse modelo.
       // {
       //   name: "endereco",
@@ -165,7 +182,7 @@ class Funcionarios extends Component {
       //       type: "text"
       //     },
       //     {
-      //       name: "pontoReferencia",
+      //       name: "ponto.Referencia",
       //       type: "text"
       //     },
       //   ]
