@@ -67,7 +67,7 @@ class ModalDeVizualizar extends Component {
     e.preventDefault()
 
     const dados = this.reorganizarCampos(this.state.data)
-
+    console.log(dados)
     api.post(this.props.rotaDeCadastro, dados)
       .then((sucesso) => {
         const { mensagem } = sucesso.data;
