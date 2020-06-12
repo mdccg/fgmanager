@@ -15,6 +15,8 @@ import ModalSucesso from '../../components/ModalSucesso';
 
 import FirstLetterUpperCase from '../../funtions/firstLetterUpperCase';
 
+import masksInputs from '../../funtions/masksInputs';
+
 class ModalDeVizualizar extends Component {
 
   state = {
@@ -186,6 +188,7 @@ class ModalDeVizualizar extends Component {
               value={this.state.data[campo].value}
               onChange={(e) => this.onChange(e)}
               required={this.state.data[campo].required}
+              mask-clearifnotmatch="true"
             />
           </div>
         ))
@@ -193,6 +196,10 @@ class ModalDeVizualizar extends Component {
     }
 
     this.setState({ inputs })
+  }
+
+  componentDidUpdate() {
+    masksInputs()
   }
 
   componentWillReceiveProps() {
@@ -231,6 +238,7 @@ class ModalDeVizualizar extends Component {
 
         <ModalSucesso mensagem={this.state.mensagemSucesso} toggle={() => this.toggleMensagemSucesso()} />
         <ModalErro mensagem={this.state.mensagemErro} toggle={() => this.toggleMensagemErro()} />
+        {masksInputs()}
       </main>
     );
   }

@@ -78,10 +78,12 @@ class Funcionarios extends Component {
 
   SalvarDados(e) {
     e.preventDefault();
+    console.log(this.state.editarSelecionado)
     api.post('/funcionarios/editar', this.state.editarSelecionado)
       .then((sucesso) => {
+        
         const { mensagem } = sucesso.data;
-        console.log(sucesso.data)
+        console.log(mensagem)
         this.setState({ mensagemSucesso: mensagem, selecionado: this.state.editarSelecionado });
         this.BuscarFuncionarios();
         this.update();
@@ -109,7 +111,6 @@ class Funcionarios extends Component {
   }
 
   onChange(e) {
-    console.log(e.target.value)
     var value = e.target.value;
     var key = e.target.name;
     this.setState({ editarSelecionado: { ...this.state.editarSelecionado, [key]: value } })
@@ -145,18 +146,13 @@ class Funcionarios extends Component {
         required: true
       },
       {
-        name: "rg",
-        type: "text",
-        required: false
-      },
-      {
         name: "telefone",
         type: "text",
         required: false
       },
       {
         name: "email",
-        type: "text",
+        type: "email",
         required: true
       },
       // Se precisar de campos para endereco, tem abaixo o modelo, o componente de modal já aceita esse modelo.
