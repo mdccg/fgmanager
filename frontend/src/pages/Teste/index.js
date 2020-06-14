@@ -15,7 +15,7 @@ class Teste extends Component {
   }
 
   create = () => {
-    alert('pressione f5 caro usuario!!!!');
+    
   }
 
   read = () => {

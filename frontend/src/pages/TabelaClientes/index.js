@@ -1,137 +1,266 @@
 import React, { Component } from 'react';
-import { MDBDataTable, MDBTableEditor } from 'mdbreact';
-import { Link } from 'react-router-dom';
 
-import './style.css';
+import TabelaCrud from './../../components/TabelaCrud';
+
 import api from './../../services/api';
 
+import ModalDeCadastrar from '../../components/ModalDeCadastrar';
+import ModalDeVisualizar from '../../components/ModalDeVizualizar';
 import ModalDeEdicao from '../../components/ModalDeEdicao';
-import ModalDeVizualizar from '../../components/ModalDeVizualizar';
 import ModalDeExcluir from '../../components/ModalDeExcluir';
 
-class TabelaClientes extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          mensagemEditar: null,
-          mensagemVisualizar: null,
-          mensagemExcluir: null,
-          listaCliente: []
+import ModalErro from '../../components/ModalErro';
+import ModalSucesso from '../../components/ModalSucesso';
+
+
+class Teste extends Component {
+    state = {
+        clientes: null,
+        selecionado: {},
+        editarSelecionado: {},
+        abrirModalCadastrar: false,
+        abrirModalVisualizar: false,
+        abrirModalEditar: false,
+        abrirModalErro: false,
+        mensagemSucesso: null,
+        mensagemErro: null,
+    };
+
+    setSelecionado = selecionado => {
+        this.setState({ selecionado: selecionado });
+    }
+
+    create = () => {
+        this.setState({ abrirModalCadastrar: !this.state.abrirModalCadastrar });
+    }
+
+    read = () => {
+        this.setState({ abrirModalVisualizar: !this.state.abrirModalVisualizar });
+    }
+
+    update = () => {
+        if (!this.state.abrirModalEditar) {
+            this.setState({ editarSelecionado: this.state.selecionado });
         }
-      }
-    
-    toggleMensagemEditar() {
-        this.setState({ mensagemEditar: null})
-    }
-    toggleMensagemVisualizar() {
-        this.setState({ mensagemVisualizar: null })
-    }
-    toggleMensagemExcluir() {
-        this.setState({ mensagemExcluir: null })
+
+        this.setState({ abrirModalEditar: !this.state.abrirModalEditar });
     }
 
-    Editar(event){
-        var conteudo = 'mensagem';
-        event.preventDefault();
-        this.setState({ mensagemEditar: conteudo });
+    delete = () => {
+        this.setState({ abrirModalErro: !this.state.abrirModalErro });
     }
-    Visualisar(event) {
-        var conteudo = 'mensagem';
-        event.preventDefault();
-        this.setState({ mensagemVisualizar: conteudo });
-    }
-    Excluir(event) {
-        var conteudo = 'Tem certeza que deseja excluir este cliente?';
-        event.preventDefault();
-        this.setState({ mensagemExcluir: conteudo });
-    }
-    getModeloById = id => {
-        try {
-            return this.state.listaCliente.filter(listaCliente => listaCliente._id === id)[0].nome;
-
-        } catch (exception) {
-            console.error(
-                'TesteDeAlonsoError: NÃO ALTERNE ENTRE AS TELAS TÃO RÁPIDO!\n'
-            );
-        }
+    toggleMensagemErro() {
+        this.setState({ mensagemErro: null })
     }
 
-    async componentDidMount() {
-        let listaCliente = await api.get('/clientes');
+    toggleMensagemSucesso() {
+        this.setState({ mensagemSucesso: null })
+    }
 
-        this.setState({ listaCliente: listaCliente.data });
 
+    async BuscarClientes() {
+        const clientes = (await api.get('/clientes')).data;
+        this.setState({ clientes });
+    }
+
+    componentWillMount() {
+        this.BuscarClientes();
+    }
+
+    SalvarDados(e) {
+        e.preventDefault();
+        console.log(this.state.editarSelecionado)
+        api.post('/clientes/editar', this.state.editarSelecionado)
+            .then((sucesso) => {
+
+                const { mensagem } = sucesso.data;
+                console.log(mensagem)
+                this.setState({ mensagemSucesso: mensagem, selecionado: this.state.editarSelecionado });
+                this.BuscarClientes();
+                this.update();
+            })
+            .catch(error => {
+                const { mensagem } = error.response.data;
+                console.log(error)
+                this.setState({ mensagemErro: mensagem });
+            });
+    }
+    deletar() {
+        const id = this.state.selecionado._id;
+        api.post('/clientes/remover', { id })
+            .then((sucesso) => {
+                const { mensagem } = sucesso.data;
+                this.setState({ mensagemSucesso: mensagem, selecionado: {} });
+                this.BuscarClientes();
+                this.delete();
+            })
+            .catch(error => {
+                const { mensagem } = error.response.data;
+                this.setState({ mensagemErro: mensagem })
+            });
+    }
+
+    onChange(e) {
+        var value = e.target.value;
+        var key = e.target.name;
+        this.setState({ editarSelecionado: { ...this.state.editarSelecionado, [key]: value } })
+    }
+    camposCadastro() {
+        var camposImput = [
+            {
+                name: "nome",
+                type: "text",
+                required: true
+            },        
+            {
+                name: "cpf",
+                type: "text",
+                required: true
+            },
+            {
+                name: "rg",
+                type: "text",
+                required: true
+            },
+
+            {
+                name: "telefone",
+                type: "text",
+                required: false
+            },
+            {
+                name: "email",
+                type: "email",
+                required: true
+            },
+            {
+              name: "endereco",
+              camposDeEndereco: [
+                {
+                  name: "rua",
+                  type: "text"
+                },
+                {
+                  name: "numero",
+                  type: "text"
+                },
+                {
+                  name: "bairro",
+                  type: "text"
+                },
+                {
+                  name: "cidade",
+                  type: "text"
+                },
+                {
+                  name: "cep",
+                  type: "text"
+                },
+                {
+                  name: "ponto.Referencia",
+                  type: "text"
+                },
+              ]
+            }
+        ]
+
+        return camposImput
     }
 
     render() {
-        const { listaCliente: rows } = this.state;
-        const DatatablePage = () => {
-            const data = {
-                columns: [
-                    {
-                        label: 'Nome',
-                        field: 'nome',
-                        sort: 'asc',
-                        width: 270
-                    },
-                    {
-                        label: 'CPF',
-                        field: 'cpf',
-                        sort: 'asc',
-                        width: 200
-                    },
-                    {
-                        label: 'RG',
-                        field: 'rg',
-                        sort: 'asc',
-                        width: 200
-                    },
-                    {
-                        label: 'Telefone',
-                        field: 'telefone',
-                        sort: 'asc',
-                        width: 100
-                    },
+        const { clientes, selecionado } = this.state;
 
+        const crud = {
+            create: this.create,
+            read: this.read,
+            update: this.update,
+            delete: this.delete,
+        };
 
-                ],
-                rows: rows
-            };
+        const rows = clientes;
 
-            return (
-                <MDBDataTable
-                    hover
-                    striped
-                    bordered
-                    responsive
-                    data={data}
-                    id="estoque" />
-            );
-        }
+        const data = {
+            columns: [
+                {
+                    label: '№ de CPF',
+                    field: 'cpf',
+                    sort: 'asc',
+                    width: 270
+                },
+                {
+                    label: 'Nome',
+                    field: 'nome',
+                    sort: 'asc',
+                    width: 150
+                },
+                {
+                    label: 'Endereço eletrônico',
+                    field: 'email',
+                    sort: 'asc',
+                    width: 200
+                },
+                {
+                    label: 'Telefone',
+                    field: 'telefone',
+                    sort: 'asc',
+                    width: 100
+                }
+            ],
+            rows: rows
+        };
+
         return (
             <main className="container-main-fgtelecom">
-                <section className="stacatto">
-                    <div></div>
+                <TabelaCrud
+                    crud={crud}
+                    data={data}
+                    tuplas={clientes}
+                    identificador="cpf"
+                    selecionado={selecionado}
+                    setSelecionado={selecionado => this.setSelecionado(selecionado)} />
 
-                    <h1>Clientes</h1>
+                <ModalDeCadastrar
+                    isOpen={this.state.abrirModalCadastrar}
+                    camposImput={this.camposCadastro()}
+                    toggle={this.create}
+                    atualizarLista={() => this.BuscarFuncionarios()}
+                    rotaDeCadastro="/clientes/novo"
+                />
 
-                    <Link to="./../Clientes/">
-                        <button className="novo">Novo Cliente+</button>
-                    </Link>
-                </section>
-                <div className="containerAcoe">
-                    <button type="button" className="btn btn btn-warning" onClick={(event) => this.Editar(event)}> <i class="fas fa-edit"></i></button>
-                    <button type="button" className="btn btn-primary " onClick={(event) => this.Visualisar(event)}><i class="far fa-eye"></i></button>
-                    <button type="button" className="btn btn-danger " onClick={(event) => this.Excluir(event)}><i class="fas fa-trash-alt"></i></button>
-                </div>
+                <ModalDeVisualizar
+                    isOpen={this.state.abrirModalVisualizar}
+                    data={this.state.selecionado}
+                    toggle={this.read}
+                />
 
+                <ModalDeEdicao
+                    onChange={(e) => this.onChange(e)}
+                    isOpen={this.state.abrirModalEditar}
+                    data={this.state.editarSelecionado}
+                    dataOriginal={this.state.selecionado}
+                    toggle={this.update}
+                    salvarDados={(e) => this.SalvarDados(e)}
+                />
 
-                <DatatablePage rows={rows} />
-                <ModalDeEdicao mensagem={this.state.mensagemEditar} toggle={() => this.toggleMensagemEditar()} />
-                <ModalDeVizualizar mensagem={this.state.mensagemVisualizar} toggle={() => this.toggleMensagemVisualizar()} />
-                <ModalDeExcluir mensagem={this.state.mensagemExcluir} toggle={() => this.toggleMensagemExcluir()} />
+                <ModalDeExcluir
+                    isOpen={this.state.abrirModalErro}
+                    toggle={this.delete}
+                    mensagem='Tem certeza que deseja excluir o cliente?'
+                    deletar={() => this.deletar()}
+                />
+
+                <ModalSucesso
+                    mensagem={this.state.mensagemSucesso}
+                    toggle={() => this.toggleMensagemSucesso()}
+                />
+
+                <ModalErro
+                    mensagem={this.state.mensagemErro}
+                    toggle={() => this.toggleMensagemErro()}
+                />
             </main>
         );
     }
 }
-export default TabelaClientes;
+
+export default Teste;
