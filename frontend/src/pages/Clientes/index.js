@@ -1,143 +1,277 @@
 import React, { Component } from 'react';
-import './styles.css';
 
-import api from './../../services/api';
+import TabelaCrud from '../../components/TabelaCrud';
+
+import api from '../../services/api';
+
+import ModalDeCadastrar from '../../components/ModalDeCadastrar';
+import ModalDeVisualizar from '../../components/ModalDeVizualizar';
+import ModalDeEdicao from '../../components/ModalDeEdicao';
+import ModalDeExcluir from '../../components/ModalDeExcluir';
 
 import ModalErro from '../../components/ModalErro';
 import ModalSucesso from '../../components/ModalSucesso';
 
-class Clientes extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      mensagemErro: null,
-      mensagemSucesso: null
-    }
-  }
+class Teste extends Component {
+    state = {
+        clientes: null,
+        selecionado: {},
+        editarSelecionado: {},
+        abrirModalCadastrar: false,
+        abrirModalVisualizar: false,
+        abrirModalEditar: false,
+        abrirModalErro: false,
+        mensagemSucesso: null,
+        mensagemErro: null,
+    };
 
-  cadastrar(event) {
-    event.preventDefault();
-
-    const form = {
-      nome: document.getElementById("inome").value,
-      cpf: document.getElementById("icpf").value,
-      rg: document.getElementById("irg").value,
-      telefone: document.getElementById("itel").value,
-      email: document.getElementById("iemail").value,
-      endereco: {
-        rua: document.getElementById("irua").value,
-        numero: document.getElementById("inum_rua").value,
-        bairro: document.getElementById("ibairro").value,
-        cidade: document.getElementById("icidade").value,
-        cep: document.getElementById("icep").value,
-        pontoReferencia: document.getElementById("iponto_referencia").value,
-      }
+    setSelecionado = selecionado => {
+        this.setState({ selecionado: selecionado });
     }
 
-    api.post('/clientes/novo', form)
-      .then((sucesso) => {
-        const { mensagem } = sucesso.data;
-        this.setState({ mensagemSucesso: mensagem })
-      })
-      .catch(error => {
-        const { mensagem } = error.response.data;
-        this.setState({ mensagemErro: mensagem })
-      });
-  }
+    create = () => {
+        this.setState({ abrirModalCadastrar: !this.state.abrirModalCadastrar });
+    }
 
-  toggleMensagemErro() {
-    this.setState({ mensagemErro: null })
-  }
+    read = () => {
+        this.setState({ abrirModalVisualizar: !this.state.abrirModalVisualizar });
+    }
 
-  toggleMensagemSucesso() {
-    this.setState({ mensagemSucesso: null })
-  }
+    update = () => {
+        if (!this.state.abrirModalEditar) {
+            this.setState({ editarSelecionado: this.state.selecionado });
+        }
 
-  render() {
-    return (
-      <main className="container-main-fgtelecom">
-        <form onSubmit={(event) => this.cadastrar(event)}>
-          <div className="clientes">
-            <div>
-              <div className="containerTitulo">
-                <div className="titulo">
-                  <h2 >Clientes</h2>
-                </div>
-              </div>
-              <div className="container">
-                <div className="row alinhar">
-                  <div className="col-lg-4">
-                    <button type="button" name="listar" id="ilistar" className="float-right btn btn-warning btn-sm  ">Listar</button>
-                  </div>
-                </div>
-              </div>
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label className="rotulo">Nome completo</label>
-                    <input type="text" name="nome" id="inome" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Nº de CPF</label>
-                    <input type="text" name="cpf" id="icpf" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Nº de RG</label>
-                    <input type="text" name="rg" id="irg" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label className="rotulo">Telefone</label>
-                    <input type="text" name="tel" id="itel" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">E-Mail</label>
-                    <input type="text" name="email" id="iemail" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Rua</label>
-                    <input type="text" name="rua" id="irua" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-lg-4">
-                    <label className="rotulo">Nº de Rua</label>
-                    <input type="text" name="num_rua" id="inum_rua" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Bairro</label>
-                    <input type="text" name="bairro" id="ibairro" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Cidade</label>
-                    <input type="text" name="cidade" id="icidade" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
+        this.setState({ abrirModalEditar: !this.state.abrirModalEditar });
+    }
 
-                </div>
-                <div className="row ">
-                  <div className="col-lg-4 ">
-                    <label className="rotulo">CEP</label>
-                    <input type="text" name="cep" id="icep" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4">
-                    <label className="rotulo">Ponto de referencia</label>
-                    <input type="text" name="ponto_referencia" id="iponto_referencia" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" required />
-                  </div>
-                  <div className="col-lg-4 botao">
-                    <button type="submit" name="adicionar" id="iadicionar" className=" btn btn-block btn-success btn-adicionar-clientes">ADICIONAR</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-        <ModalSucesso mensagem={this.state.mensagemSucesso} rotaDeRetorno='clientes' toggle={() => this.toggleMensagemSucesso()} />
-        <ModalErro mensagem={this.state.mensagemErro} toggle={() => this.toggleMensagemErro()} />
-      </main>
-    );
-  }
+    delete = () => {
+        this.setState({ abrirModalErro: !this.state.abrirModalErro });
+    }
+    toggleMensagemErro() {
+        this.setState({ mensagemErro: null })
+    }
+
+    toggleMensagemSucesso() {
+        this.setState({ mensagemSucesso: null })
+    }
+
+
+    async BuscarClientes() {
+        const clientes = (await api.get('/clientes')).data;
+        this.setState({ clientes });
+    }
+
+    componentWillMount() {
+        this.BuscarClientes();
+    }
+
+    SalvarDados(e) {
+        e.preventDefault();
+        api.post('/clientes/editar', this.state.editarSelecionado)
+            .then((sucesso) => {
+
+                const { mensagem } = sucesso.data;
+                this.setState({ mensagemSucesso: mensagem, selecionado: this.state.editarSelecionado });
+                this.BuscarClientes();
+                this.update();
+            })
+            .catch(error => {
+                const { mensagem } = error.response.data;
+                this.setState({ mensagemErro: mensagem });
+            });
+    }
+    deletar() {
+        const id = this.state.selecionado._id;
+        api.post('/clientes/remover', { id })
+            .then((sucesso) => {
+                const { mensagem } = sucesso.data;
+                this.setState({ mensagemSucesso: mensagem, selecionado: {} });
+                this.BuscarClientes();
+                this.delete();
+            })
+            .catch(error => {
+                const { mensagem } = error.response.data;
+                this.setState({ mensagemErro: mensagem })
+            });
+    }
+
+    // onChange(e) {
+    //     var value = e.target.value;
+    //     var key = e.target.name;
+    //     this.setState({ editarSelecionado: { ...this.state.editarSelecionado, [key]: value } })
+    // }
+
+    onChange(e) {
+        var name = e.target.name
+        var value = e.target.value
+
+        if (name.indexOf("endereco") !== -1) {
+            name = name.replace("endereco.", "");
+            this.setState({ editarSelecionado: { ...this.state.editarSelecionado, endereco: { ...this.state.editarSelecionado.endereco, [name]: value } } })
+            return
+        }
+
+        this.setState({ editarSelecionado: { ...this.state.editarSelecionado, [name]: value } })
+    }
+
+    camposCadastro() {
+        var camposImput = [
+            {
+                name: "nome",
+                type: "text",
+                required: true
+            },
+            {
+                name: "cpf",
+                type: "text",
+                required: true
+            },
+            {
+                name: "rg",
+                type: "text",
+                required: true
+            },
+
+            {
+                name: "telefone",
+                type: "text",
+                required: true
+            },
+            {
+                name: "email",
+                type: "email",
+                required: true
+            },
+            {
+                name: "endereco",
+                camposDeEndereco: [
+                    {
+                        name: "rua",
+                        type: "text"
+                    },
+                    {
+                        name: "numero",
+                        type: "text"
+                    },
+                    {
+                        name: "bairro",
+                        type: "text"
+                    },
+                    {
+                        name: "cidade",
+                        type: "text"
+                    },
+                    {
+                        name: "cep",
+                        type: "text"
+                    },
+                    {
+                        name: "ponto.Referencia",
+                        type: "text"
+                    },
+                ]
+            }
+        ]
+
+        return camposImput
+    }
+
+    render() {
+        const { clientes, selecionado } = this.state;
+
+        const crud = {
+            create: this.create,
+            read: this.read,
+            update: this.update,
+            delete: this.delete,
+        };
+
+        const rows = clientes;
+
+        const data = {
+            columns: [
+                {
+                    label: '№ de CPF',
+                    field: 'cpf',
+                    sort: 'asc',
+                    width: 270
+                },
+                {
+                    label: 'Nome',
+                    field: 'nome',
+                    sort: 'asc',
+                    width: 150
+                },
+                {
+                    label: 'Endereço eletrônico',
+                    field: 'email',
+                    sort: 'asc',
+                    width: 200
+                },
+                {
+                    label: 'Telefone',
+                    field: 'telefone',
+                    sort: 'asc',
+                    width: 100
+                }
+            ],
+            rows: rows
+        };
+
+        return (
+            <main className="container-main-fgtelecom">
+                <TabelaCrud
+                    crud={crud}
+                    data={data}
+                    tuplas={clientes}
+                    identificador="cpf"
+                    selecionado={selecionado}
+                    setSelecionado={selecionado => this.setSelecionado(selecionado)} />
+
+                <ModalDeCadastrar
+                    isOpen={this.state.abrirModalCadastrar}
+                    camposImput={this.camposCadastro()}
+                    toggle={this.create}
+                    atualizarLista={() => this.BuscarClientes()}
+                    rotaDeCadastro="/clientes/novo"
+                />
+
+                <ModalDeVisualizar
+                    isOpen={this.state.abrirModalVisualizar}
+                    data={this.state.selecionado}
+                    toggle={this.read}
+                />
+
+                <ModalDeEdicao
+                    onChange={(e) => this.onChange(e)}
+                    isOpen={this.state.abrirModalEditar}
+                    data={this.state.editarSelecionado}
+                    dataOriginal={this.state.selecionado}
+                    toggle={this.update}
+                    salvarDados={(e) => this.SalvarDados(e)}
+                />
+
+                <ModalDeExcluir
+                    isOpen={this.state.abrirModalErro}
+                    toggle={this.delete}
+                    mensagem='Tem certeza que deseja excluir o cliente?'
+                    deletar={() => this.deletar()}
+                />
+
+                <ModalSucesso
+                    mensagem={this.state.mensagemSucesso}
+                    toggle={() => this.toggleMensagemSucesso()}
+                />
+
+                <ModalErro
+                    mensagem={this.state.mensagemErro}
+                    toggle={() => this.toggleMensagemErro()}
+                />
+            </main>
+        );
+    }
 }
 
-export default Clientes;
+export default Teste;

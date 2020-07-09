@@ -109,7 +109,26 @@ class ModalDeEdicao extends Component {
     var inputs = []
     for (var key in dados) {
       if (key.toLocaleLowerCase() !== "_id" && key.toLocaleLowerCase() !== "__v" && key.toLocaleLowerCase() !== "clickevent" && key.toLocaleLowerCase() !== "usuario") {
-        if (typeof dados[key] === "array") {
+        if (typeof dados[key] !== "object") {
+          inputs.push((
+            <div className="form-group">
+              <label htmlFor="nome">{FirstLetterUpperCase(key)}</label>
+              <input
+                type="key"
+                name={key}
+                value={dados[key]}
+                className="form-control"
+                onChange={(e) => this.props.onChange(e)}
+              />
+            </div>
+          ))
+        }
+      }
+    }
+
+    for (var key in dados) {
+      if (key.toLocaleLowerCase() !== "_id" && key.toLocaleLowerCase() !== "__v" && key.toLocaleLowerCase() !== "clickevent" && key.toLocaleLowerCase() !== "usuario") {
+        if (typeof dados[key] === "object") {
           const inArray = dados[key]
           for (var i in inArray) {
             inputs.push((
@@ -117,29 +136,16 @@ class ModalDeEdicao extends Component {
                 <label htmlFor="nome">{i === "pontoReferencia" ? "Ponto Referencia" : FirstLetterUpperCase(i)}</label>
                 <input
                   type="text"
-                  disabled
                   value={inArray[i]}
                   className="form-control"
+                  name={"endereco." + i}
+                  onChange={(e) => this.props.onChange(e)}
                 />
               </div>
             ))
           }
           continue
         }
-
-        inputs.push((
-          <div className="form-group">
-            <label htmlFor="nome">{FirstLetterUpperCase(key)}</label>
-            <input
-              type="key"
-              // disabled
-              name={key}
-              value={dados[key]}
-              className="form-control"
-              onChange={(e) => this.props.onChange(e)}
-            />
-          </div>
-        ))
       }
     }
 

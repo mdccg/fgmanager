@@ -17,7 +17,25 @@ class ModalDeVizualizar extends Component {
     var inputs = []
     for (var key in dados) {
       if (key.toLocaleLowerCase() !== "_id" && key.toLocaleLowerCase() !== "__v" && key.toLocaleLowerCase() !== "clickevent" && key.toLocaleLowerCase() !== "usuario") {
-        if (typeof dados[key] === "array") {
+        if (typeof dados[key] !== "object") {
+          inputs.push((
+            <div className="form-group">
+              <label htmlFor="nome">{FirstLetterUpperCase(key)}</label>
+              <input
+                type="text"
+                disabled
+                value={dados[key]}
+                className="form-control"
+              />
+            </div>
+          ))
+        }
+      }
+    }
+
+    for (var key in dados) {
+      if (key.toLocaleLowerCase() !== "_id" && key.toLocaleLowerCase() !== "__v" && key.toLocaleLowerCase() !== "clickevent" && key.toLocaleLowerCase() !== "usuario") {
+        if (typeof dados[key] === "object") {
           const inArray = dados[key]
           for (var i in inArray) {
             inputs.push((
@@ -34,18 +52,6 @@ class ModalDeVizualizar extends Component {
           }
           continue
         }
-
-        inputs.push((
-          <div className="form-group">
-            <label htmlFor="nome">{FirstLetterUpperCase(key)}</label>
-            <input
-              type="text"
-              disabled
-              value={dados[key]}
-              className="form-control"
-            />
-          </div>
-        ))
       }
     }
 

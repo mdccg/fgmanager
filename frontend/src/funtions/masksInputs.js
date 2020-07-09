@@ -3,7 +3,7 @@ import $ from 'jquery'
 const masksInputs = () => {
 
   var interval = setInterval(() => {
-
+    
     $('.date').mask('00/00/0000', {
       placeholder: '',
     });
@@ -23,13 +23,6 @@ const masksInputs = () => {
 
     $('#cep').mask('00.000-000');
 
-    // if (
-    //   document.getElementById("cpf") ||
-    //   document.getElementById("telefone") ||
-    //   document.getElementById("cep")
-    // ) {
-    //   clearInterval(interval);
-    // }
   }, 100);
 }
 

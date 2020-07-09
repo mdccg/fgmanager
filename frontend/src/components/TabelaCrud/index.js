@@ -131,6 +131,7 @@ class TabelaCrud extends Component {
           data={dataOnTable}
           bordered
           striped
+          language={"pt-br"}
           hover />
       </div>
     );
