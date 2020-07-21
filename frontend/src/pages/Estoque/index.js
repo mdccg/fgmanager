@@ -1,336 +1,245 @@
-import React, { useState, Component, Fragment } from 'react';
-import './styles.css';
+import React, { Component } from 'react';
 
-import TabelaProdutos from './../../components/TabelaProdutos';
-import api from './../../services/api';
+import TabelaCrud from '../../components/TabelaCrud';
 
-import { MDBBtn, MDBIcon, MDBModal, MDBModalBody, MDBModalHeader } from 'mdbreact';
+import api from '../../services/api';
 
-const isEmpty = object => Object.keys(object).length === 0 && object.constructor === Object;
+import ModalDeCadastrar from '../../components/ModalDeCadastrar';
+import ModalDeVisualizar from '../../components/ModalDeVizualizar';
+import ModalDeEdicao from '../../components/ModalDeEdicao';
+import ModalDeExcluir from '../../components/ModalDeExcluir';
+
+import ModalErro from '../../components/ModalErro';
+import ModalSucesso from '../../components/ModalSucesso';
+
 
 class Estoque extends Component {
   state = {
     produtos: null,
-    modelos: [],
     selecionado: {},
-    modais: {
-      cadastrar: false,
-      editar: false,
-      apagar: false,
-    },
+    editarSelecionado: {},
+    abrirModalCadastrar: false,
+    abrirModalVisualizar: false,
+    abrirModalEditar: false,
+    abrirModalErro: false,
+    mensagemSucesso: null,
+    mensagemErro: null
   };
 
-  toggle = operacao => {
-    this.setState({
-      modais: {
-        [operacao]: !this.state.modais[operacao]
-      }
-    });
-  }
-
-  cadastrarProduto = async event => {
-    event.preventDefault();
-    const atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
-      produto = {};
-
-    for (const atributo of atributos)
-      produto[atributo] = event.target[atributo].value;
-
-    const modelo = {};
-    modelo.nome = produto.modelo;
-
-    try {
-      modelo._id = this.getModelo('nome', modelo.nome)._id;
-
-    } catch (exception) {
-      await api.post('/estoque/modelo/novo', { nome: modelo.nome })
-        .then(response => console.log(response))
-        .catch(error => console.error(error.response));
-
-      this.setState({ modelos: (await api.get('/estoque/modelo')).data });
-
-      modelo._id = this.getModelo('nome', modelo.nome)._id;
-    }
-
-    produto.modelo = modelo._id;
-
-    await api.post('/estoque/produto/novo', produto)
-      .then(response => console.log(response))
-      .catch(error => console.error(error.response));
-
-    this.toggle('cadastrar');
-    window.location.pathname = '/estoque';
-  }
-
-  editar = async event => {
-    event.preventDefault();
-
-    const _id = this.state.produtos.filter(produto => produto.codigo === event.target.codigo.value)[0]._id,
-      atributos = ['nome', 'marca', 'modelo', 'codigo', 'smartCard'],
-      produto = {};
-
-    for (const atributo of atributos)
-      produto[atributo] = event.target[atributo].value;
-
-    const modelo = {};
-    modelo.nome = produto.modelo;
-    modelo._id = this.getModelo('nome', modelo.nome)._id;
-
-    produto.modelo = modelo._id; produto._id = _id;
-
-    console.log(produto);
-
-    await api.post('/estoque/produto/editar', produto)
-      .then(response => console.log(response))
-      .catch(error => console.error(error.response));
-
-    this.toggle('editar');
-    window.location.pathname = '/estoque';
-  }
-
-  apagar = async () => {
-    const { produtos, selecionado } = this.state;
-
-    const _id = produtos.filter(produto => produto.codigo === selecionado.codigo)[0]._id;
-
-    await api.post('/estoque/produto/remover', { id: _id })
-      .then(response => console.log(response))
-      .catch(error => console.error(error.response));
-
-    this.toggle('apagar');
-    window.location.pathname = '/estoque';
-  }
-
-  selecionarProduto = codigo => {
-    const undoSelect = tbody => {
-      for (const tr of tbody.querySelectorAll('tr')) {
-        const className = tr.attributes.class;
-        if (!className) continue;
-        if (className.value === 'selecionada') {
-          tr.classList.remove('selecionada');
-          break;
-        }
-      }
-    }
-
-    const select = (tbody, codigo) => {
-      for (const tr of tbody.querySelectorAll('tr')) {
-        const td_codigo = tr.querySelector('td').textContent;
-        if (td_codigo === codigo) tr.classList.add('selecionada');
-      }
-    }
-
-    const { selecionado: antigo } = this.state;
-    const selecionado = this.state.produtos.filter(produto => produto.codigo === codigo)[0];
-
-    const tbody = document.querySelector(`.estoque tbody[data-test='table-body']`);
-
-    if (!isEmpty(antigo)) {
-      undoSelect(tbody);
-
-      if (antigo._id === selecionado._id) {
-        this.setState({ selecionado: {} });
-        return;
-      }
-    }
-
+  setSelecionado = selecionado => {
     this.setState({ selecionado: selecionado });
-    select(tbody, codigo);
   }
 
-  getModelo = (atributo, valor) => {
-    try {
-      return this.state.modelos.filter(modelo => modelo[atributo] === valor)[0];
+  create = () => {
+    this.setState({ abrirModalCadastrar: !this.state.abrirModalCadastrar });
+  }
 
-    } catch (exception) {
-      console.error(
-        'TesteDeAlonsoError: NÃO ALTERNE ENTRE AS TELAS TÃO RÁPIDO!\n'
-        + '\tat Estoque.getModeloById (index.js:16)\n'
-        + '\tat CasaDoCaixaPrego.js (<anonymous>)\n'
-        + '\tat QuintoDosInferno.ts (<anonymous>)\n' // bazinga
-        + '\tat LaOndeJudasPerdeuAsBotas.cs (baphoMet.java:666)'
-      );
+  read = () => {
+    this.setState({ abrirModalVisualizar: !this.state.abrirModalVisualizar });
+  }
+
+  update = () => {
+    if (!this.state.abrirModalEditar)
+      this.setState({ editarSelecionado: this.state.selecionado });
+
+    this.setState({ abrirModalEditar: !this.state.abrirModalEditar });
+  }
+
+  delete = () => {
+    this.setState({ abrirModalErro: !this.state.abrirModalErro });
+  }
+
+  toggleMensagemErro() {
+    this.setState({ mensagemErro: null });
+  }
+
+  toggleMensagemSucesso() {
+    this.setState({ mensagemSucesso: null });
+  }
+
+  async buscarProdutos() {
+    const produtos = (await api.get('/estoque/produto')).data;
+    this.setState({ produtos });
+  }
+
+  componentWillMount() {
+    this.buscarProdutos();
+  }
+
+  salvarDados(event) {
+    event.preventDefault();
+
+    api.post('/estoque/produto/editar', this.state.editarSelecionado)
+      .then(sucesso => {
+        const { mensagem } = sucesso.data;
+        this.setState({
+          mensagemSucesso: mensagem,
+          selecionado: this.state.editarSelecionado
+        });
+        this.buscarProdutos();
+        this.update();
+      })
+      .catch(error => {
+        const { mensagem } = error.response.data;
+        this.setState({ mensagemErro: mensagem });
+      });
+  }
+
+  deletar() {
+    const id = this.state.selecionado._id;
+    api.post('/estoque/produto/remover', { id })
+      .then(sucesso => {
+        const { mensagem } = sucesso.data;
+        this.setState({
+          mensagemSucesso: mensagem,
+          selecionado: {}
+        });
+        this.buscarProdutos();
+        this.delete();
+      })
+      .catch(error => {
+        const { mensagem } = error.response.data;
+        this.setState({ mensagemErro: mensagem })
+      });
+  }
+
+  onChange(event) {
+    var name = event.target.name;
+    var value = event.target.value;
+
+    if (name.indexOf("endereco") !== -1) {
+        name = name.replace("endereco.", "");
+        this.setState({
+          editarSelecionado: {
+            ...this.state.editarSelecionado,
+            endereco: {
+              ...this.state.editarSelecionado.endereco,
+              [name]: value
+            }
+          }
+        });
+        return;
     }
-  }
 
-  async componentDidMount() {
-    let produtos = (await api.get('/estoque/produto')).data;
-    let modelos = (await api.get('/estoque/modelo')).data;
-
-    this.setState({ modelos: modelos });
-
-    produtos.map(produto => {
-      produto.clickEvent = event => {
-        const tr = event.currentTarget;
-        const codigo = tr.querySelector('td').textContent;
-
-        this.selecionarProduto(codigo);
-      };
-
-      const modelo = {};
-      modelo._id = produto.modelo;
-      try { modelo.nome = this.getModelo('_id', modelo._id).nome; } catch (exception) { }
-
-      return produto.modelo = modelo.nome;
+    this.setState({
+      editarSelecionado: {
+        ...this.state.editarSelecionado,
+        [name]: value
+      }
     });
-
-    this.setState({ produtos: produtos });
   }
 
   render() {
-    const { modelos, produtos, selecionado, modais } = this.state;
+    const { produtos: rows, selecionado } = this.state;
 
-    const ModalCadastro = ({ isOpen, toggle, modelos }) => (
-      <MDBModal isOpen={isOpen} toggle={toggle}>
-        <MDBModalHeader toggle={toggle}>Cadastrar produto</MDBModalHeader>
-        <MDBModalBody>
-          <form onSubmit={event => this.cadastrarProduto(event)} method="POST">
-            <div className="form-group">
-              <label htmlFor="nome">Nome</label>
-              <input type="text" className="form-control" name="nome" placeholder="Moto G(6)" required />
-            </div>
+    const crud = {
+      create: this.create,
+      read: this.read,
+      update: this.update,
+      delete: this.delete
+    };
 
-            <div className="form-group">
-              <label htmlFor="marca">Marca</label>
-              <input type="text" className="form-control" name="marca" placeholder="Smartphone" required />
-            </div>
+    const data = {
+      columns: [
+        {
+          label: 'Código',
+          field: 'codigo',
+          sort: 'asc',
+          width: 100
+        },
+        {
+          label: 'Nome',
+          field: 'nome',
+          sort: 'asc',
+          width: 270
+        },
+        {
+          label: 'Marca',
+          field: 'marca',
+          sort: 'asc',
+          width: 150
+        },
+        {
+          label: 'Modelo',
+          field: 'modelo',
+          sort: 'asc',
+          width: 200
+        }
+      ],
+      rows: rows
+    };
 
-            <div className="form-group">
-              <label htmlFor="modelo">Modelo</label>
-
-              <input type="text" className="form-control" name="modelo" list="modelos" autoComplete="off" placeholder="Motorola" required />
-              <datalist id="modelos">
-                {modelos.map(modelo => <option key={modelo._id} value={modelo.nome}>{modelo._id}</option>)}
-              </datalist>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="codigo">Código</label>
-              <input type="text" className="form-control" name="codigo" placeholder="0 1234 5678 9" required />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="smartCard">Smart card</label>
-              <input type="text" className="form-control" name="smartCard" placeholder="40-02-89-22" required />
-            </div>
-
-            <MDBBtn color="success" type="submit">Cadastrar</MDBBtn>
-          </form>
-        </MDBModalBody>
-      </MDBModal>
-    );
-
-    const ModalEdicao = ({ isOpen, toggle, selecionado, modelos }) => {
-      const [nome, setNome] = useState(selecionado.nome);
-      const [marca, setMarca] = useState(selecionado.marca);
-      const [modelo, setModelo] = useState(selecionado.modelo);
-      const [codigo, setCodigo] = useState(selecionado.codigo);
-      const [smartCard, setSmartCard] = useState(selecionado.smartCard);
-
-      return (
-        <MDBModal isOpen={isOpen} toggle={toggle}>
-          <MDBModalHeader toggle={toggle}>Editar produto</MDBModalHeader>
-          <MDBModalBody>
-            <form onSubmit={event => this.editar(event)}>
-              <div className="form-group">
-                <label htmlFor="nome">Nome</label>
-                <input
-                  type="text"
-                  name="nome"
-                  value={nome}
-                  placeholder="Moto G(6)"
-                  className="form-control"
-                  onChange={event => setNome(event.target.value)} />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="marca">Marca</label>
-                <input
-                  type="text"
-                  name="marca"
-                  value={marca}
-                  placeholder="Smartphone"
-                  className="form-control"
-                  onChange={event => setMarca(event.target.value)} />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="modelo">Modelo</label>
-                <input
-                  type="text"
-                  name="modelo"
-                  list="modelos"
-                  value={modelo}
-                  autoComplete="off"
-                  placeholder="Motorola"
-                  className="form-control"
-                  onChange={event => setModelo(event.target.value)} />
-                <datalist id="modelos">
-                  {modelos.map(modelo => <option key={modelo._id} value={modelo.nome}>{modelo._id}</option>)}
-                </datalist>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="codigo">Código</label>
-                <input
-                  type="text"
-                  name="codigo"
-                  value={codigo}
-                  placeholder="0 1234 5678 9"
-                  className="form-control"
-                  onChange={event => setCodigo(event.target.value)} />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="smartCard">Smart card</label>
-                <input
-                  type="text"
-                  name="smartCard"
-                  value={smartCard}
-                  placeholder="40-02-89-22"
-                  className="form-control"
-                  onChange={event => setSmartCard(event.target.value)} />
-              </div>
-
-              <MDBBtn color="warning" type="submit">Salvar</MDBBtn>
-            </form>
-          </MDBModalBody>
-        </MDBModal>
-      );
-    }
+    const camposImput = [
+      {
+        name: 'nome',
+        type: 'text',
+        required: true
+      },
+      {
+        name: 'marca',
+        type: 'text',
+        required: true
+      },
+      {
+        name: 'modelo',
+        type: 'text',
+        required: true
+      },
+      {
+        name: 'codigo',
+        type: 'text',
+        required: true
+      },
+      {
+        name: 'smartCard',
+        type: 'text',
+        required: true
+      }
+    ];
 
     return (
-      <main className="estoque container-main-fgtelecom">
-        <div className="crud">
-          <Fragment>
-            <MDBBtn color="success" onClick={() => this.toggle('cadastrar')}>
-              <MDBIcon icon="plus" />
-            </MDBBtn>
+      <main className="container-main-fgtelecom">
+        <TabelaCrud
+          crud={crud}
+          data={data}
+          tuplas={rows}
+          identificador="codigo"
+          selecionado={selecionado}
+          setSelecionado={selecionado => this.setSelecionado(selecionado)} />
+        
+        <ModalDeCadastrar
+          toggle={this.create}
+          camposImput={camposImput}
+          rotaDeCadastro="/estoque/produto/novo"
+          isOpen={this.state.abrirModalCadastrar}
+          atualizarLista={() => this.buscarProdutos()} />
 
-            <ModalCadastro
-              modelos={modelos}
-              isOpen={modais.cadastrar}
-              toggle={() => this.toggle('cadastrar')} />
+        <ModalDeVisualizar
+          toggle={this.read}
+          data={this.state.selecionado}
+          isOpen={this.state.abrirModalVisualizar} />
 
-            <MDBBtn color="warning" onClick={() => this.toggle('editar')} disabled={isEmpty(selecionado)}>
-              <MDBIcon icon="pencil-alt" />
-            </MDBBtn>
+        <ModalDeEdicao
+          toggle={this.update}
+          data={this.state.editarSelecionado}
+          isOpen={this.state.abrirModalEditar}
+          dataOriginal={this.state.selecionado}
+          onChange={event => this.onChange(event)}
+          salvarDados={event => this.salvarDados(event)} />
 
-            <ModalEdicao
-              modelos={modelos}
-              isOpen={modais.editar}
-              selecionado={selecionado}
-              toggle={() => this.toggle('editar')} />
+        <ModalDeExcluir
+          toggle={this.delete}
+          deletar={() => this.deletar()}
+          isOpen={this.state.abrirModalErro}
+          mensagem='Tem certeza que deseja excluir o produto?' />
+        
+        <ModalSucesso
+          mensagem={this.state.mensagemSucesso}
+          toggle={() => this.toggleMensagemSucesso()} />
 
-            <MDBBtn color="danger" onClick={this.apagar} disabled={isEmpty(selecionado)}>
-              <MDBIcon icon="trash-alt" />
-            </MDBBtn>
-
-            {/* ModalDelecao aqui */}
-          </Fragment>
-        </div>
-
-        <TabelaProdutos produtos={produtos} />
+        <ModalErro
+          mensagem={this.state.mensagemErro}
+          toggle={() => this.toggleMensagemErro()} />
       </main>
     );
   }
