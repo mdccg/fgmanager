@@ -9,7 +9,7 @@ import {
 import './style_Edicao.css';
 
 import isEquivalent from '../../funtions/compareObjects';
-import FirstLetterUpperCase from '../../funtions/firstLetterUpperCase';
+import Capitalize from '../../funtions/Capitalize';
 
 
 class ModalDeEdicao extends Component {
@@ -105,23 +105,34 @@ class ModalDeEdicao extends Component {
   // }
 
   createInputs() {
-    const dados = this.props.data;
+    let { data: dados, requiredInputs, inputEspecial, inputEspecialList, onChange } = this.props;
+    requiredInputs = requiredInputs ? requiredInputs : {}
+    inputEspecial = inputEspecial ? inputEspecial : {}
     var inputs = []
     for (var key in dados) {
       if (key.toLocaleLowerCase() !== "_id" && key.toLocaleLowerCase() !== "__v" && key.toLocaleLowerCase() !== "clickevent" && key.toLocaleLowerCase() !== "usuario") {
         if (typeof dados[key] !== "object") {
-          inputs.push((
-            <div className="form-group">
-              <label htmlFor="nome">{FirstLetterUpperCase(key)}</label>
-              <input
-                type="key"
-                name={key}
-                value={dados[key]}
-                className="form-control"
-                onChange={(e) => this.props.onChange(e)}
-              />
-            </div>
-          ))
+
+          if (inputEspecial[key]) {
+            inputs.push(inputEspecialList[key](requiredInputs[key], key, dados[key], onChange, Capitalize))
+          }
+
+          if (!inputEspecial[key]) {
+            inputs.push((
+              <div className="form-group">
+                <label htmlFor="nome">{Capitalize(key)}</label>
+                <span className={requiredInputs[key] ? "required-style" : "none-style"}>*</span>
+                <input
+                  type="text"
+                  required={requiredInputs[key]}
+                  name={key}
+                  value={dados[key]}
+                  className="form-control"
+                  onChange={(e) => onChange(e)}
+                />
+              </div>
+            ))
+          }
         }
       }
     }
@@ -133,13 +144,15 @@ class ModalDeEdicao extends Component {
           for (var i in inArray) {
             inputs.push((
               <div className="form-group">
-                <label htmlFor="nome">{i === "pontoReferencia" ? "Ponto Referencia" : FirstLetterUpperCase(i)}</label>
+                <label htmlFor="nome">{i === "pontoReferencia" ? "Ponto Referencia" : Capitalize(i)}</label>
+                <span className={requiredInputs[key] ? "required-style" : "none-style"}>*</span>
                 <input
                   type="text"
                   value={inArray[i]}
+                  required={requiredInputs[key]}
                   className="form-control"
                   name={"endereco." + i}
-                  onChange={(e) => this.props.onChange(e)}
+                  onChange={(e) => onChange(e)}
                 />
               </div>
             ))
@@ -161,76 +174,14 @@ class ModalDeEdicao extends Component {
   }
 
   render() {
+    const { isOpen, toggle, salvarDados } = this.props
+
     return (
       <main>
-        <MDBModal isOpen={this.props.isOpen} toggle={() => this.props.toggle()}>
-          <MDBModalHeader toggle={() => this.props.toggle()} className="modal-header-Edicao-background"> <i class="fas fa-edit"></i> Editar </MDBModalHeader>
-          <form onSubmit={(e) => this.props.salvarDados(e)}>
+        <MDBModal isOpen={isOpen} toggle={() => toggle()}>
+          <MDBModalHeader toggle={() => toggle()} className="modal-header-Edicao-background"> <i class="fas fa-edit"></i> Editar </MDBModalHeader>
+          <form onSubmit={(e) => salvarDados(e)}>
             <MDBModalBody className="barra-de-rolagem">
-              {/* <div className="form-group">
-                <label htmlFor="nome">Nome</label>
-                <span className="required-style">*</span>
-                <input
-                  type="text"
-                  name="nome"
-                  value={this.props.data.nome}
-                  className="form-control"
-                  onChange={(e) => this.props.onChange(e)}
-                  required={true}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="marca">CPF</label>
-                <span className="required-style">*</span>
-                <input
-                  type="text"
-                  name="cpf"
-                  value={this.props.data.cpf}
-                  className="form-control"
-                  onChange={(e) => this.props.onChange(e)}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="modelo">RG</label>
-                <input
-                  type="text"
-                  name="rg"
-                  list="modelos"
-                  value={this.props.data.rg}
-                  autoComplete="off"
-                  className="form-control"
-                  onChange={(e) => this.props.onChange(e)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="codigo">Telefone</label>
-                <span className="required-style">*</span>
-                <input
-                  type="text"
-                  name="telefone"
-                  value={this.props.data.telefone}
-                  className="form-control"
-                  onChange={(e) => this.props.onChange(e)}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="smartCard">E-mail</label>
-                <span className="required-style">*</span>
-                <input
-                  type="text"
-                  name="email"
-                  value={this.props.data.email}
-                  className="form-control"
-                  onChange={(e) => this.props.onChange(e)}
-                />
-              </div> 
-              <this.CamposDeEndereco /> */}
               {this.renderInputs()}
             </MDBModalBody>
             <MDBModalFooter className="footer-modal-default-system">

@@ -12,8 +12,10 @@ import ModalDeExcluir from '../../components/ModalDeExcluir';
 import ModalErro from '../../components/ModalErro';
 import ModalSucesso from '../../components/ModalSucesso';
 
+import { constants } from './constants';
 
-class Teste extends Component {
+
+class Clientes extends Component {
     state = {
         clientes: null,
         selecionado: {},
@@ -97,12 +99,6 @@ class Teste extends Component {
             });
     }
 
-    // onChange(e) {
-    //     var value = e.target.value;
-    //     var key = e.target.name;
-    //     this.setState({ editarSelecionado: { ...this.state.editarSelecionado, [key]: value } })
-    // }
-
     onChange(e) {
         var name = e.target.name
         var value = e.target.value
@@ -116,70 +112,8 @@ class Teste extends Component {
         this.setState({ editarSelecionado: { ...this.state.editarSelecionado, [name]: value } })
     }
 
-    camposCadastro() {
-        var camposImput = [
-            {
-                name: "nome",
-                type: "text",
-                required: true
-            },
-            {
-                name: "cpf",
-                type: "text",
-                required: true
-            },
-            {
-                name: "rg",
-                type: "text",
-                required: true
-            },
-
-            {
-                name: "telefone",
-                type: "text",
-                required: true
-            },
-            {
-                name: "email",
-                type: "email",
-                required: true
-            },
-            {
-                name: "endereco",
-                camposDeEndereco: [
-                    {
-                        name: "rua",
-                        type: "text"
-                    },
-                    {
-                        name: "numero",
-                        type: "text"
-                    },
-                    {
-                        name: "bairro",
-                        type: "text"
-                    },
-                    {
-                        name: "cidade",
-                        type: "text"
-                    },
-                    {
-                        name: "cep",
-                        type: "text"
-                    },
-                    {
-                        name: "ponto.Referencia",
-                        type: "text"
-                    },
-                ]
-            }
-        ]
-
-        return camposImput
-    }
-
     render() {
-        const { clientes, selecionado } = this.state;
+        const { clientes: rows, selecionado } = this.state;
 
         const crud = {
             create: this.create,
@@ -188,35 +122,8 @@ class Teste extends Component {
             delete: this.delete,
         };
 
-        const rows = clientes;
-
         const data = {
-            columns: [
-                {
-                    label: '№ de CPF',
-                    field: 'cpf',
-                    sort: 'asc',
-                    width: 270
-                },
-                {
-                    label: 'Nome',
-                    field: 'nome',
-                    sort: 'asc',
-                    width: 150
-                },
-                {
-                    label: 'Endereço eletrônico',
-                    field: 'email',
-                    sort: 'asc',
-                    width: 200
-                },
-                {
-                    label: 'Telefone',
-                    field: 'telefone',
-                    sort: 'asc',
-                    width: 100
-                }
-            ],
+            columns: constants.columns,
             rows: rows
         };
 
@@ -225,14 +132,14 @@ class Teste extends Component {
                 <TabelaCrud
                     crud={crud}
                     data={data}
-                    tuplas={clientes}
+                    tuplas={rows}
                     identificador="cpf"
                     selecionado={selecionado}
                     setSelecionado={selecionado => this.setSelecionado(selecionado)} />
 
                 <ModalDeCadastrar
                     isOpen={this.state.abrirModalCadastrar}
-                    camposImput={this.camposCadastro()}
+                    camposImput={constants.camposCadastro}
                     toggle={this.create}
                     atualizarLista={() => this.BuscarClientes()}
                     rotaDeCadastro="/clientes/novo"
@@ -251,6 +158,7 @@ class Teste extends Component {
                     dataOriginal={this.state.selecionado}
                     toggle={this.update}
                     salvarDados={(e) => this.SalvarDados(e)}
+                    requiredInputs={{nome: true, cpf: true, rg: true, telefone: true, email: true}}
                 />
 
                 <ModalDeExcluir
@@ -274,4 +182,4 @@ class Teste extends Component {
     }
 }
 
-export default Teste;
+export default Clientes;

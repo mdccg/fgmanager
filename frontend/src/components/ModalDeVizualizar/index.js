@@ -8,7 +8,7 @@ import {
 } from 'mdbreact';
 import './style_Visualizar.css';
 
-import FirstLetterUpperCase from '../../funtions/firstLetterUpperCase';
+import Capitalize from '../../funtions/Capitalize';
 
 class ModalDeVizualizar extends Component {
 
@@ -20,7 +20,7 @@ class ModalDeVizualizar extends Component {
         if (typeof dados[key] !== "object") {
           inputs.push((
             <div className="form-group">
-              <label htmlFor="nome">{FirstLetterUpperCase(key)}</label>
+              <label htmlFor="nome">{Capitalize(key)}</label>
               <input
                 type="text"
                 disabled
@@ -40,7 +40,7 @@ class ModalDeVizualizar extends Component {
           for (var i in inArray) {
             inputs.push((
               <div className="form-group">
-                <label htmlFor="nome">{i === "pontoReferencia" ? "Ponto Referencia" : FirstLetterUpperCase(i)}</label>
+                <label htmlFor="nome">{i === "pontoReferencia" ? "Ponto Referencia" : Capitalize(i)}</label>
                 <input
                   type="text"
                   disabled

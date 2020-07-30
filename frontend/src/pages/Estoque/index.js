@@ -12,8 +12,10 @@ import ModalDeExcluir from '../../components/ModalDeExcluir';
 import ModalErro from '../../components/ModalErro';
 import ModalSucesso from '../../components/ModalSucesso';
 
+import { constants } from './constants';
 
 class Estoque extends Component {
+  
   state = {
     produtos: null,
     selecionado: {},
@@ -107,20 +109,6 @@ class Estoque extends Component {
     var name = event.target.name;
     var value = event.target.value;
 
-    if (name.indexOf("endereco") !== -1) {
-        name = name.replace("endereco.", "");
-        this.setState({
-          editarSelecionado: {
-            ...this.state.editarSelecionado,
-            endereco: {
-              ...this.state.editarSelecionado.endereco,
-              [name]: value
-            }
-          }
-        });
-        return;
-    }
-
     this.setState({
       editarSelecionado: {
         ...this.state.editarSelecionado,
@@ -140,62 +128,10 @@ class Estoque extends Component {
     };
 
     const data = {
-      columns: [
-        {
-          label: 'Código',
-          field: 'codigo',
-          sort: 'asc',
-          width: 100
-        },
-        {
-          label: 'Nome',
-          field: 'nome',
-          sort: 'asc',
-          width: 270
-        },
-        {
-          label: 'Marca',
-          field: 'marca',
-          sort: 'asc',
-          width: 150
-        },
-        {
-          label: 'Modelo',
-          field: 'modelo',
-          sort: 'asc',
-          width: 200
-        }
-      ],
+      columns: constants.columns,
       rows: rows
     };
 
-    const camposImput = [
-      {
-        name: 'nome',
-        type: 'text',
-        required: true
-      },
-      {
-        name: 'marca',
-        type: 'text',
-        required: true
-      },
-      {
-        name: 'modelo',
-        type: 'text',
-        required: true
-      },
-      {
-        name: 'codigo',
-        type: 'text',
-        required: true
-      },
-      {
-        name: 'smartCard',
-        type: 'text',
-        required: true
-      }
-    ];
 
     return (
       <main className="container-main-fgtelecom">
@@ -209,7 +145,7 @@ class Estoque extends Component {
         
         <ModalDeCadastrar
           toggle={this.create}
-          camposImput={camposImput}
+          camposImput={constants.camposCadastro}
           rotaDeCadastro="/estoque/produto/novo"
           isOpen={this.state.abrirModalCadastrar}
           atualizarLista={() => this.buscarProdutos()} />
@@ -225,7 +161,9 @@ class Estoque extends Component {
           isOpen={this.state.abrirModalEditar}
           dataOriginal={this.state.selecionado}
           onChange={event => this.onChange(event)}
-          salvarDados={event => this.salvarDados(event)} />
+          salvarDados={event => this.salvarDados(event)}
+          requiredInputs={{nome: true, marca: true, modelo: true, codigo: true, smartCard: true}}
+        />
 
         <ModalDeExcluir
           toggle={this.delete}

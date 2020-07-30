@@ -12,16 +12,12 @@ import ModalDeExcluir from '../../components/ModalDeExcluir';
 import ModalErro from '../../components/ModalErro';
 import ModalSucesso from '../../components/ModalSucesso';
 
-import "./styles.css"
+import { constants } from './constants';
+
+import "./styles.css";
 
 
 class Funcionarios extends Component {
-
-  // constructor(props) {
-  //   super(props);
-
-  //   this.read = this.read.bind()
-  // }
 
   state = {
     funcionarios: null,
@@ -81,7 +77,7 @@ class Funcionarios extends Component {
     console.log(this.state.editarSelecionado)
     api.post('/funcionarios/editar', this.state.editarSelecionado)
       .then((sucesso) => {
-        
+
         const { mensagem } = sucesso.data;
         console.log(mensagem)
         this.setState({ mensagemSucesso: mensagem, selecionado: this.state.editarSelecionado });
@@ -116,82 +112,9 @@ class Funcionarios extends Component {
     this.setState({ editarSelecionado: { ...this.state.editarSelecionado, [key]: value } })
   }
 
-  camposCadastro() {
-    var camposImput = [
-      {
-        name: "nome",
-        type: "text",
-        required: true
-      },
-      {
-        name: "senha",
-        type: "password",
-        required: true
-      },
-      {
-        name: "confirmar.Senha",
-        type: "password",
-        required: true
-      },
-      {
-        name: "tipo",
-        type: "select",
-        descricao: "Escolha o tipo de funcionário",
-        required: true,
-        options: ["almoxarife", "técnico"]
-      },
-      {
-        name: "cpf",
-        type: "text",
-        required: true
-      },
-      {
-        name: "telefone",
-        type: "text",
-        required: false
-      },
-      {
-        name: "email",
-        type: "email",
-        required: true
-      },
-      // Se precisar de campos para endereco, tem abaixo o modelo, o componente de modal já aceita esse modelo.
-      // {
-      //   name: "endereco",
-      //   camposDeEndereco: [
-      //     {
-      //       name: "rua",
-      //       type: "text"
-      //     },
-      //     {
-      //       name: "numero",
-      //       type: "text"
-      //     },
-      //     {
-      //       name: "bairro",
-      //       type: "text"
-      //     },
-      //     {
-      //       name: "cidade",
-      //       type: "text"
-      //     },
-      //     {
-      //       name: "cep",
-      //       type: "text"
-      //     },
-      //     {
-      //       name: "ponto.Referencia",
-      //       type: "text"
-      //     },
-      //   ]
-      // }
-    ]
-
-    return camposImput
-  }
 
   render() {
-    const { funcionarios, selecionado } = this.state;
+    const { funcionarios: rows, selecionado } = this.state;
 
     const crud = {
       create: this.create,
@@ -200,35 +123,8 @@ class Funcionarios extends Component {
       delete: this.delete,
     };
 
-    const rows = funcionarios;
-
     const data = {
-      columns: [
-        {
-          label: '№ de CPF',
-          field: 'cpf',
-          sort: 'asc',
-          width: 270
-        },
-        {
-          label: 'Nome',
-          field: 'nome',
-          sort: 'asc',
-          width: 150
-        },
-        {
-          label: 'Endereço eletrônico',
-          field: 'email',
-          sort: 'asc',
-          width: 200
-        },
-        {
-          label: 'Telefone',
-          field: 'telefone',
-          sort: 'asc',
-          width: 100
-        }
-      ],
+      columns: constants.columns,
       rows: rows
     };
 
@@ -237,7 +133,7 @@ class Funcionarios extends Component {
         <TabelaCrud
           crud={crud}
           data={data}
-          tuplas={funcionarios}
+          tuplas={rows}
           identificador="cpf"
           selecionado={selecionado}
           setSelecionado={selecionado => this.setSelecionado(selecionado)}
@@ -245,7 +141,7 @@ class Funcionarios extends Component {
 
         <ModalDeCadastrar
           isOpen={this.state.abrirModalCadastrar}
-          camposImput={this.camposCadastro()}
+          camposImput={constants.camposCadastro}
           toggle={this.create}
           atualizarLista={() => this.BuscarFuncionarios()}
           rotaDeCadastro="/funcionarios/novo"
@@ -264,6 +160,29 @@ class Funcionarios extends Component {
           dataOriginal={this.state.selecionado}
           toggle={this.update}
           salvarDados={(e) => this.SalvarDados(e)}
+          requiredInputs={{ nome: true, tipo: true, cpf: true, telefone: true, email: true }}
+          inputEspecial={{ tipo: true }}
+          inputEspecialList={{
+            tipo: (required, campo, value, onChange, Capitalize) => {
+              return (
+                <div className="form-group">
+                  <label className="rotulo">{Capitalize("tipo")}</label>
+                  <span className={required ? "required-style" : "none-style"}>*</span>
+                  <select
+                    required={required}
+                    name={campo}
+                    value={value}
+                    onChange={onChange}
+                    className="browser-default custom-select"
+                  >
+                    <option value="">Escolha o tipo de funcionário</option>
+                    <option value={"almoxerife"}>{Capitalize("almoxerife")}</option>
+                    <option value={"tecnico"}>{Capitalize("técnico")}</option>
+                  </select>
+                </div>
+              )
+            }
+          }}
         />
 
         <ModalDeExcluir

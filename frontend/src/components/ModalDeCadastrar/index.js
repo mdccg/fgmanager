@@ -13,7 +13,7 @@ import api from './../../services/api';
 import ModalErro from '../../components/ModalErro';
 import ModalSucesso from '../../components/ModalSucesso';
 
-import FirstLetterUpperCase from '../../funtions/firstLetterUpperCase';
+import Capitalize from '../../funtions/Capitalize';
 
 import masksInputs from '../../funtions/masksInputs';
 
@@ -127,7 +127,7 @@ class ModalDeVizualizar extends Component {
           var camposImputEderenco = camposImput[campo]
           inputs.push((
             <div className="form-group">
-              <label className="rotulo">{FirstLetterUpperCase(campoEndereco.replace(/\./g, " "))}</label>
+              <label className="rotulo">{Capitalize(campoEndereco.replace(/\./g, " "))}</label>
               <span className={this.state.data[campo].required ? "required-style" : "none-style"}>*</span>
               <input
                 type={camposImputEderenco[campoEndereco].type}
@@ -150,7 +150,7 @@ class ModalDeVizualizar extends Component {
       if (camposImput[campo].type === "select") {
         inputs.push((
           <div className="form-group">
-            <label className="rotulo">{FirstLetterUpperCase(campo.replace(/\./g, " "))}</label>
+            <label className="rotulo">{Capitalize(campo.replace(/\./g, " "))}</label>
             <span className={this.state.data[campo].required ? "required-style" : "none-style"}>*</span>
             <select
               required={true}
@@ -161,7 +161,7 @@ class ModalDeVizualizar extends Component {
             >
               <option value="">{camposImput[campo].descricao}</option>
               {camposImput[campo].options.map((option, key) => {
-                return (<option key={key} value={option}>{FirstLetterUpperCase(option)}</option>)
+                return (<option key={key} value={option}>{Capitalize(option)}</option>)
               })}
             </select>
           </div>
@@ -173,10 +173,10 @@ class ModalDeVizualizar extends Component {
         inputs.push((
           <div className="form-group">
             {/* 
-            A função FirstLetterUpperCase() transforma todas as primeiras
+            A função Capitalize() transforma todas as primeiras
             letras da palavra em maiúsculas e o restante permanece minúscula. 
           */}
-            <label className="rotulo">{FirstLetterUpperCase(campo.replace(/\./g, " "))}</label>
+            <label className="rotulo">{Capitalize(campo.replace(/\./g, " "))}</label>
             <span className={this.state.data[campo].required ? "required-style" : "none-style"}>*</span>
             <input
               type={camposImput[campo].type}
