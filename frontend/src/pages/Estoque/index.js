@@ -4,9 +4,7 @@ import TabelaCrud from '../../components/TabelaCrud';
 
 import api from '../../services/api';
 
-import ModalDeCadastrar from '../../components/ModalDeCadastrar';
 import ModalDeVisualizar from '../../components/ModalDeVizualizar';
-import ModalDeEdicao from '../../components/ModalDeEdicao';
 import ModalDeExcluir from '../../components/ModalDeExcluir';
 
 import ModalErro from '../../components/ModalErro';
@@ -14,18 +12,27 @@ import ModalSucesso from '../../components/ModalSucesso';
 
 import { constants } from './constants';
 
+import Modal from './component/Modal';
+
 class Estoque extends Component {
-  
+
+  constructor(props) {
+    super(props)
+    this.key = 0;
+  }
+
   state = {
     produtos: null,
     selecionado: {},
     editarSelecionado: {},
-    abrirModalCadastrar: false,
+    abrirModal: false,
     abrirModalVisualizar: false,
     abrirModalEditar: false,
     abrirModalErro: false,
     mensagemSucesso: null,
-    mensagemErro: null
+    mensagemErro: null,
+    optionsAutocomplete: {},
+    action: "",
   };
 
   setSelecionado = selecionado => {
@@ -33,7 +40,7 @@ class Estoque extends Component {
   }
 
   create = () => {
-    this.setState({ abrirModalCadastrar: !this.state.abrirModalCadastrar });
+    this.setState({ abrirModal: !this.state.abrirModal, action: 'novo', });
   }
 
   read = () => {
@@ -41,10 +48,16 @@ class Estoque extends Component {
   }
 
   update = () => {
-    if (!this.state.abrirModalEditar)
-      this.setState({ editarSelecionado: this.state.selecionado });
+    if (!this.state.abrirModal) {
+      this.setState({
+        abrirModal: !this.state.abrirModal,
+        action: 'editar',
+        editarSelecionado: this.state.selecionado
+      });
+      return
+    }
 
-    this.setState({ abrirModalEditar: !this.state.abrirModalEditar });
+    this.setState({ abrirModal: !this.state.abrirModal, action: 'editar' });
   }
 
   delete = () => {
@@ -61,30 +74,11 @@ class Estoque extends Component {
 
   async buscarProdutos() {
     const produtos = (await api.get('/estoque/produto')).data;
-    this.setState({ produtos });
+    this.setState({ produtos, editarSelecionado: {} });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.buscarProdutos();
-  }
-
-  salvarDados(event) {
-    event.preventDefault();
-
-    api.post('/estoque/produto/editar', this.state.editarSelecionado)
-      .then(sucesso => {
-        const { mensagem } = sucesso.data;
-        this.setState({
-          mensagemSucesso: mensagem,
-          selecionado: this.state.editarSelecionado
-        });
-        this.buscarProdutos();
-        this.update();
-      })
-      .catch(error => {
-        const { mensagem } = error.response.data;
-        this.setState({ mensagemErro: mensagem });
-      });
   }
 
   deletar() {
@@ -105,20 +99,13 @@ class Estoque extends Component {
       });
   }
 
-  onChange(event) {
-    var name = event.target.name;
-    var value = event.target.value;
-
-    this.setState({
-      editarSelecionado: {
-        ...this.state.editarSelecionado,
-        [name]: value
-      }
-    });
-  }
-
   render() {
-    const { produtos: rows, selecionado } = this.state;
+    const {
+      produtos: rows,
+      selecionado,
+      abrirModal,
+      action
+    } = this.state;
 
     const crud = {
       create: this.create,
@@ -132,6 +119,7 @@ class Estoque extends Component {
       rows: rows
     };
 
+    console.log(action)
 
     return (
       <main className="container-main-fgtelecom">
@@ -142,35 +130,37 @@ class Estoque extends Component {
           identificador="codigo"
           selecionado={selecionado}
           setSelecionado={selecionado => this.setSelecionado(selecionado)} />
-        
-        <ModalDeCadastrar
-          toggle={this.create}
-          camposImput={constants.camposCadastro}
-          rotaDeCadastro="/estoque/produto/novo"
-          isOpen={this.state.abrirModalCadastrar}
-          atualizarLista={() => this.buscarProdutos()} />
+
+        <Modal
+          toggle={action === "novo" ? this.create : this.update}
+          isOpen={abrirModal}
+          atualizarLista={() => this.buscarProdutos()}
+          data={this.state.editarSelecionado}
+          dataOriginal={this.state.selecionado}
+          action={action}
+        />
 
         <ModalDeVisualizar
           toggle={this.read}
           data={this.state.selecionado}
           isOpen={this.state.abrirModalVisualizar} />
 
-        <ModalDeEdicao
+        {/* <ModalDeEdicao
           toggle={this.update}
           data={this.state.editarSelecionado}
           isOpen={this.state.abrirModalEditar}
           dataOriginal={this.state.selecionado}
           onChange={event => this.onChange(event)}
           salvarDados={event => this.salvarDados(event)}
-          requiredInputs={{nome: true, marca: true, modelo: true, codigo: true, smartCard: true}}
-        />
+          requiredInputs={{ nome: true, marca: true, modelo: true, codigo: true, smartCard: true }}
+        /> */}
 
         <ModalDeExcluir
           toggle={this.delete}
           deletar={() => this.deletar()}
           isOpen={this.state.abrirModalErro}
           mensagem='Tem certeza que deseja excluir o produto?' />
-        
+
         <ModalSucesso
           mensagem={this.state.mensagemSucesso}
           toggle={() => this.toggleMensagemSucesso()} />

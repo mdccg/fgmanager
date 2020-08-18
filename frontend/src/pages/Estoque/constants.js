@@ -1,3 +1,5 @@
+import api from '../../services/api';
+
 var camposCadastro = [
     {
         name: 'nome',
@@ -10,9 +12,16 @@ var camposCadastro = [
         required: true
     },
     {
-        name: 'modelo',
-        type: 'text',
-        required: true
+        name: "modelo",
+        type: "autocomplete",
+        descricao: "Escolha um modelo",
+        required: true,
+        options: [],
+        addToList: true,
+        request: (modelo) => {
+            return api.post('/estoque/modelo/novo', {"nome": modelo})
+        },
+        loading: true
     },
     {
         name: 'codigo',

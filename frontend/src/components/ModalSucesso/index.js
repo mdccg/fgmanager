@@ -34,6 +34,7 @@ class Teste extends Component {
         }
 
         if (this.state.rotaDeRetorno) {
+            this.setState({ rotaDeRetorno: null })
             return <Redirect to={'/' + this.state.rotaDeRetorno} />;
         }
 
@@ -44,11 +45,7 @@ class Teste extends Component {
                     <MDBModalBody className="text-mensagem">
                         {this.props.mensagem}
                     </MDBModalBody>
-                    {/* <MDBModalFooter className="size-padding-modal-sucesso">
-            <MDBBtn color="danger" size="sm" onClick={() => this.props.toggle()}>fechar</MDBBtn>
-          </MDBModalFooter> */}
                 </MDBModal>
-
 
             </main>
         );

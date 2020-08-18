@@ -4,9 +4,14 @@ import {
   MDBModal,
   MDBModalHeader,
   MDBModalBody,
-  MDBModalFooter
+  MDBModalFooter,
 } from 'mdbreact';
 import './index.css';
+
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
 
 import api from './../../services/api';
 
@@ -38,9 +43,6 @@ class ModalDeVizualizar extends Component {
     const dadosReorganizados = {}
 
     for (var campo in dados) {
-      campo = campo;
-      console.log(campo)
-
       if (campo === "senha" || campo === "confirmar.Senha") {
         if (dados['senha'].value !== dados['confirmar.Senha'].value) {
           return this.setState({ mensagemErro: "As senhas têm que ser idênticas" });
@@ -69,7 +71,6 @@ class ModalDeVizualizar extends Component {
     e.preventDefault()
 
     const dados = this.reorganizarCampos(this.state.data)
-    console.log(dados)
     api.post(this.props.rotaDeCadastro, dados)
       .then((sucesso) => {
         const { mensagem } = sucesso.data;
@@ -94,7 +95,19 @@ class ModalDeVizualizar extends Component {
         }
         continue;
       }
-      setState = { ...setState, [camposImput[key].name]: { value: "", type: camposImput[key].type, required: camposImput[key].required, descricao: camposImput[key].descricao, options: camposImput[key].options } };
+      setState = {
+        ...setState,
+        [camposImput[key].name]: {
+          value: "",
+          type: camposImput[key].type,
+          required: camposImput[key].required,
+          descricao: camposImput[key].descricao,
+          options: camposImput[key].options,
+          loading: camposImput[key].loading,
+          addToList: camposImput[key].addToList,
+          request: camposImput[key].request
+        }
+      };
     }
 
     setState.endereco = endereco;
@@ -117,9 +130,34 @@ class ModalDeVizualizar extends Component {
       () => this.carregarInputs())
   }
 
+  carregarOptionsAutocompletes() {
+    try {
+      let { data } = this.state;
+      let autocompletes = this.props.optionsAutocomplete
+      let keys = Object.keys(autocompletes)
+      keys.map((campo, key) => {
+        this.setState({
+          data: {
+            ...data,
+            [campo]: {
+              ...data[campo],
+              options: autocompletes[campo].list,
+              updateList: autocompletes[campo].updateList,
+              loading: false
+            }
+          }
+        })
+      })
+    } catch (e) { }
+  }
+
+  // componentDidMount() {
+  //   this.carregarOptionsAutocompletes();
+  // }
+
   carregarInputs() {
-    var inputs = []
-    var camposImput = this.state.data
+    let inputs = []
+    let camposImput = this.state.data
 
     for (var campo in camposImput) {
       if (campo === "endereco") {
@@ -168,6 +206,87 @@ class ModalDeVizualizar extends Component {
         ))
 
         continue;
+      } else if (camposImput[campo].type === "autocomplete") {
+        let campoAutocomplete = campo
+        let value = undefined;
+        let btnSalvar = (<></>)
+        try {
+          value = this.state.data[campoAutocomplete].value;
+        } catch (e) { }
+
+        if (camposImput[campoAutocomplete].addToList) {
+          const {data} = this.state;
+          const options = data[campoAutocomplete].options
+          btnSalvar = (
+            <Button
+              style={{ width: "20%"}}
+              disableElevation
+              className="ml-2"
+              variant="contained"
+              disabled={options.filter(opt => opt === value)[0] || !value}
+              onClick={async () => {
+                try{
+                  const response = await data[campoAutocomplete].request(value)
+                  const mensagem = response.data.mensagem;
+                  this.setState({ mensagemSucesso: mensagem })
+                  data[campoAutocomplete].updateList();
+                }catch(e) {
+                  console.log(e)
+                  this.setState({ mensagemErro: "Erro ao cadastrar novo modelo" })
+                }
+              }}
+            >
+              Salvar
+            </Button>
+          )
+        }
+
+        inputs.push((
+          <div className="autocomplete-format">
+            <label className="rotulo">{Capitalize(campo.replace(/\./g, " "))}</label>
+            <span className={this.state.data[campo].required ? "required-style" : "none-style"}>*</span>
+            <Autocomplete
+              options={camposImput[campo].options}
+              getOptionLabel={(option) => option}
+              id="disable-close-on-select"
+              name={camposImput[campo].name}
+              value={value}
+              clearOnBlur={false}
+              loading={camposImput[campoAutocomplete].loading}
+              className="mb-3"
+              onChange={(event, value) => this.onChange({
+                target: {
+                  name: campoAutocomplete,
+                  value: value
+                }
+              })
+              }
+              renderInput={(params) => (
+                <>
+                  <TextField
+                    {...params}
+                    style={{ width: camposImput[campoAutocomplete].addToList ? "78%" : "" }}
+                    name={campoAutocomplete}
+                    placeholder={camposImput[campoAutocomplete].descricao}
+                    variant='outlined'
+                    onChange={this.onChange.bind(this)}
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <React.Fragment>
+                          {camposImput[campoAutocomplete].loading ? <CircularProgress color="inherit" size={20} /> : null}
+                          {params.InputProps.endAdornment}
+                        </React.Fragment>
+                      ),
+                    }}
+                  />
+                  {btnSalvar}
+                </>
+              )}
+            />
+          </div>
+        ))
+
       } else {
 
         inputs.push((
@@ -198,8 +317,9 @@ class ModalDeVizualizar extends Component {
     this.setState({ inputs })
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     masksInputs()
+    this.carregarOptionsAutocompletes();
   }
 
   componentWillReceiveProps() {
@@ -236,7 +356,7 @@ class ModalDeVizualizar extends Component {
           </form>
         </MDBModal>
 
-        <ModalSucesso mensagem={this.state.mensagemSucesso} toggle={() => this.toggleMensagemSucesso()} />
+        <ModalSucesso mensagem={this.state.mensagemSucesso} toggle={() => this.toggleMensagemSucesso()} rotaDeRetorno="estoque" />
         <ModalErro mensagem={this.state.mensagemErro} toggle={() => this.toggleMensagemErro()} />
         {masksInputs()}
       </main>
