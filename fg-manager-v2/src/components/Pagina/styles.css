@@ -1,0 +1,18 @@
+.plano-de-fundo {
+  background-color: var(--city-lights);
+
+  display: flex;
+  flex: 1;
+}
+
+.pagina {
+  background-color: white;
+
+  margin:  16px;
+  padding: 16px;
+
+  display: flex;
+  flex: 1;
+
+  box-shadow: 0 0 2px rgba(0, 0, 0, .25);
+}

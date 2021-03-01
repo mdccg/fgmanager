@@ -1,0 +1,43 @@
+.menu-lateral {
+  margin-top: 64px;
+  
+  max-width: 75vw;
+  width: 256px;
+}
+
+.menu-lateral a {
+  text-decoration: none;
+}
+
+.menu-lateral .rota {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+
+  min-height: 64px;
+
+  border-left: 4px solid transparent;
+}
+
+.menu-lateral .rota.selecionada {
+  border-left: 4px solid var(--american-river);
+}
+
+.menu-lateral .rota .icone {
+  margin-left:  16px;
+  margin-right: 16px;
+}
+
+.menu-lateral .rota .icone svg {
+  width:  24px;
+  height: 24px;
+
+  color: var(--american-river);
+}
+
+.menu-lateral .rota span {
+  text-transform: uppercase;
+  font-weight: bold;
+
+  color: var(--american-river);
+}

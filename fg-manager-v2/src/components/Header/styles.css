@@ -1,0 +1,75 @@
+.header {
+  background-color: var(--chi-gong);
+
+  box-sizing: border-box;
+  padding-left:  16px;
+  padding-right: 16px;
+
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+
+  position: fixed;
+  width: 100vw;
+  z-index: 1;
+
+  min-height: 64px;
+}
+
+.header svg[data-icon='bars'] {
+  width:  32px;
+  height: 32px;
+
+  color: white;
+
+  cursor: pointer;
+}
+
+/* .header > img {
+  width:  48px;
+  height: 48px;
+} */
+
+.header .header-usuario {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+
+  cursor: pointer;
+}
+
+.header .header-usuario .header-figure-usuario {
+  width:  32px;
+  height: 32px;
+
+  justify-content: center;
+  align-items: center;
+  display: flex;
+
+  border: 2px solid white;
+  border-radius: 32px;
+}
+
+.header .header-usuario .header-figure-usuario img {
+  border-radius: 32px;
+
+  width:  32px;
+  height: 32px;
+
+  object-fit: cover;
+}
+
+.header .header-usuario svg[data-icon='user-circle'] {
+  width:  32px;
+  height: 32px;
+
+  color: white;
+}
+
+.header .header-usuario svg[data-icon='caret-down'] {
+  width:  16px;
+  height: 16px;
+
+  color: white;
+}

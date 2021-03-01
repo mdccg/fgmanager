@@ -1,0 +1,26 @@
+:root {
+  --city-lights: #dfe6e9;
+  --chi-gong: #d63031;
+  --american-river: #636e72;
+  --dracula-orchid: #2d3436;
+}
+
+html, body, #root, .App {
+  min-height: 100vh;
+}
+
+html, body, #root, .App, .pagina {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+}
+
+.unselectable {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}

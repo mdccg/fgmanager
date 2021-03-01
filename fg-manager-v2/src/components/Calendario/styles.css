@@ -1,0 +1,106 @@
+.calendario {
+  border: 1px solid var(--city-lights);
+
+  flex-direction: column;
+  display: flex;
+}
+
+.calendario .calendario-header {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+
+  min-height: 64px;
+}
+
+.calendario .calendario-header .calendario-btn {
+  width: 25vw;
+
+  cursor: pointer;
+}
+
+.calendario .calendario-header .calendario-btn svg {
+  width:  16px;
+  height: 16px;
+}
+
+.calendario .calendario-header .calendario-btn:last-child svg {
+  transform: scaleX(-1);
+}
+
+.calendario .calendario-header .calendario-indicador-data {
+  flex: 1;
+}
+
+.calendario .calendario-header .calendario-indicador-data span {
+  text-align: center;
+
+  color: var(--dracula-orchid);
+}
+
+.calendario .calendario-header > * {
+  /* border-right: 1px solid var(--city-lights); */
+
+  justify-content: center;
+  align-items: center;
+  display: flex;
+
+  height: 100%;
+}
+
+/* .calendario .calendario-header > *:last-child {
+  border-right-width: 0;  
+} */
+
+.calendario .calendario-neck {
+  background-color: var(--city-lights);
+
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+
+  min-height: 48px;
+}
+
+.calendario .calendario-neck span {
+  text-transform: uppercase;
+}
+
+.calendario .calendario-body {
+  flex-direction: column;
+  display: flex;
+}
+
+.calendario .calendario-body .semana {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+}
+
+.calendario .calendario-body .dia {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex: 1;
+
+  min-height: 64px;
+
+  transition: all .25s;
+  cursor: pointer;
+}
+
+.calendario .calendario-body .dia:hover {
+  background-color: var(--city-lights);
+}
+
+.calendario .calendario-body .dia.untouchable:hover {
+  background-color: inherit;
+  cursor: default;
+}
+
+@media only screen and (max-width: 500px) {
+  .calendario .calendario-neck span {
+    font-size: 75%;
+  }
+}
